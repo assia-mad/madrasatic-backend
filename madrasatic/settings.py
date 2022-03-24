@@ -71,6 +71,8 @@ EMAIL_HOST_USER = 'madaniyousfim@gmail.com'
 EMAIL_HOST_PASSWORD = 'meryemmdn2001'
 EMAIL_PORT = 587
 
+OLD_PASSWORD_FIELD_ENABLED = True
+
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',

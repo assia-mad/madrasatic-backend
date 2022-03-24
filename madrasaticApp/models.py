@@ -13,8 +13,6 @@ role_choices = [('Admin','Admin'),
 num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')
 
 class Myuser(AbstractUser):
-
-    
     
     first_name = None
     last_name = None

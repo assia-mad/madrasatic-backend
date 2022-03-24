@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 from .models import role_choices 
 
 
-email_validator = RegexValidator(r'^[a-z]*+[.]+[a-z]*+[@]+[esi-sba.dz]$','utiliser un email valide')
+
 class CustomRegisterSerializer(RegisterSerializer):
     address = serializers.CharField(max_length = 150)
     tel = serializers.CharField(max_length = 10 )
@@ -19,7 +19,3 @@ class CustomRegisterSerializer(RegisterSerializer):
         if domain not in domain_list:
             raise serializers.ValidationError("Please enter an Email Address with a valid domain")
         return email
-
-
-
-
