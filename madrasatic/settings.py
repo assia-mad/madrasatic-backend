@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 AUTH_USER_MODEL = 'madrasaticApp.Myuser'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
@@ -145,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'madrasaticApp.serializers.CustomRegisterSerializer',
 }
+REST_AUTH_SERIALIZERS = {'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer'}
 
 
 # Internationalization
@@ -168,3 +169,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+}

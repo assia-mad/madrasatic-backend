@@ -1,7 +1,13 @@
-from django.urls import path, re_path
-from dj_rest_auth.registration.views import RegisterView, VerifyEmailView , ConfirmEmailView
-from dj_rest_auth.views import LoginView, LogoutView , PasswordResetView , PasswordResetConfirmView , PasswordChangeView 
 
+from posixpath import basename
+from django.urls import path, re_path
+from rest_framework import routers
+from dj_rest_auth.registration.views import RegisterView, VerifyEmailView , ConfirmEmailView
+from dj_rest_auth.views import LoginView, LogoutView , PasswordResetView , PasswordResetConfirmView , PasswordChangeView
+from .views import ManageUsersView  
+
+router = routers.DefaultRouter()
+router.register(r'manageusers', ManageUsersView , basename='manageusers')
 
 urlpatterns = [
     path('account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
@@ -20,3 +26,4 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password-change/',PasswordChangeView.as_view()),
 ]
+urlpatterns += router.urls
