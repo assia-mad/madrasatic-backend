@@ -46,10 +46,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'madrasaticApp',
+    'corsheaders',
     
     
 ]
-SITE_ID = 1
+
 AUTH_USER_MODEL = 'madrasaticApp.Myuser'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
@@ -63,6 +64,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/dj-rest-auth/login/'
 LOGIN_REDIRECT_URL = '# to do after'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 LOGIN_URL = 'http://localhost:8000/madrasatic/login'
+REST_AUTH_PW_RESET_USE_SITES_DOMAIN = True
+SITE_ID = 3
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
@@ -83,10 +86,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'madrasatic.urls'
@@ -145,7 +149,10 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'madrasaticApp.serializers.CustomRegisterSerializer',
 }
-REST_AUTH_SERIALIZERS = {'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer'}
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'madrasaticApp.serializers.CustomPasswordResetSerializer',
+                      }
 
 
 # Internationalization
@@ -174,3 +181,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5
 }
+# SECURITY WARNING: don't run with debug turned on in production!
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://frontend:3000',
+    'http://0.0.0.0:3000',
+)
