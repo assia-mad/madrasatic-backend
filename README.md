@@ -11,6 +11,9 @@
  installer python 
  installer django , django rest_framework   // en utilisant la commande pip 
  # qlq cmd necessaire
-   dans le repertoire de projet : pour lancer server run : py manage.py runserver
+   dans le repertoire de projet : 
+   py manage.py makemigrations
+   py manage.py migrate
+   py manage.py runserver
    pour creer un admin de projet : py manage.py createsuperuser
    
