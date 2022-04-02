@@ -5,6 +5,7 @@ from .models import Myuser
 from dj_rest_auth.views import PasswordResetConfirmView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import permissions , authentication , mixins
+
  #is authenticated and owner for profile so that just owner of profile can modify it
 class IsAuthenticatedAndOwner(permissions.BasePermission):
     message = 'You must be the owner of this object.'
@@ -39,5 +40,4 @@ class RequestPasswordResetEmail(PasswordResetConfirmView):
 class UpdateprofileView(viewsets.GenericViewSet , mixins.UpdateModelMixin,mixins.RetrieveModelMixin):
     queryset = Myuser.objects.all()
     serializer_class = UpdateProfileSerializer
-
     permission_classes = [IsAuthenticatedAndOwner]

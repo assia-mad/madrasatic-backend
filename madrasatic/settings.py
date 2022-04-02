@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'madrasaticApp',
+    'rest_framework_swagger',
     'corsheaders',
-    
-    
+    'drf_yasg',    
 ]
 
 AUTH_USER_MODEL = 'madrasaticApp.Myuser'
@@ -65,7 +65,7 @@ LOGIN_REDIRECT_URL = '# to do after'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 LOGIN_URL = 'http://localhost:8000/madrasatic/login'
 REST_AUTH_PW_RESET_USE_SITES_DOMAIN = True
-SITE_ID = 3
+SITE_ID = 4
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
@@ -73,6 +73,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'madaniyousfim@gmail.com'
 EMAIL_HOST_PASSWORD = 'meryemmdn2001'
 EMAIL_PORT = 587
+
 
 OLD_PASSWORD_FIELD_ENABLED = True
 
@@ -151,7 +152,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'madrasaticApp.serializers.CustomPasswordResetSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'madrasaticApp.serializers.CustomPasswordResetSerializer'
                       }
 
 
@@ -178,6 +179,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5
 }

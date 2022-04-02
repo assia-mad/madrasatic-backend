@@ -9,8 +9,7 @@ from rest_framework import serializers
 from .models import Myuser, role_choices 
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth import logout
-
+from rest_framework.authtoken.models import Token
 from dj_rest_auth.serializers import PasswordResetSerializer
 
 class CustomPasswordResetSerializer(PasswordResetSerializer):
@@ -48,6 +47,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class CustomLoginSerializer(LoginSerializer):
     username = None
 
+
 class ManageusersSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     is_active = serializers.BooleanField( default=True)
@@ -83,7 +83,17 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
             instance.is_superuser = True
         instance.role = validated_data.get('role', instance.role)
             
-            
+        if instance.is_banned != validated_data.get('is_banned'):
+            if validated_data.get('is_active') == True:
+                account = 'has been activated'
+            else :
+                account = 'has been desactivated'
+            subject = 'MadrasaTic account'
+            message = f'Hi {instance.username} your account {account}'
+            from_email = settings.EMAIL_HOST_USER 
+            recipient_list = [instance.email]
+            send_mail(subject, message,from_email,recipient_list , fail_silently=False)
+              
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
         instance.save()
@@ -91,7 +101,7 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
 
 
 
-class UpdateProfileSerializer(serializers.ModelSerializer):
+class UpdateProfileSerializer(serializers.ModelSerializer):  
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
     tel = serializers.CharField(max_length = 10)
@@ -100,3 +110,10 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta :
         model = Myuser
         fields = ['username','address','tel','img']
+        lookup_field = 'uid'
+    
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ('key', 'id')
