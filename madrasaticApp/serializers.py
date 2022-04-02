@@ -9,24 +9,7 @@ from rest_framework import serializers
 from .models import Myuser, role_choices 
 from django.core.mail import send_mail
 from django.conf import settings
-from rest_framework.authtoken.models import Token
 from dj_rest_auth.serializers import PasswordResetSerializer
-
-class CustomPasswordResetSerializer(PasswordResetSerializer):
-    def save(self):
-        request = self.context.get('request')
-        # Set some values to trigger the send_email method.
-        opts = {
-            'use_https': request.is_secure(),
-            'from_email':getattr(settings, 'DEFAULT_FROM_EMAIL'),
-            'request': request,
-            # here I have set my desired template to be used
-            # don't forget to add your templates directory in settings to be found
-            
-        }
-
-        opts.update(self.get_email_options())
-        self.reset_form.save(**opts)
 
 class CustomRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField()
@@ -46,7 +29,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 class CustomLoginSerializer(LoginSerializer):
     username = None
-
 
 class ManageusersSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
@@ -99,8 +81,6 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
         instance.save()
         return instance   
 
-
-
 class UpdateProfileSerializer(serializers.ModelSerializer):  
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
@@ -111,9 +91,3 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         model = Myuser
         fields = ['username','address','tel','img']
         lookup_field = 'uid'
-    
-
-class TokenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Token
-        fields = ('key', 'id')

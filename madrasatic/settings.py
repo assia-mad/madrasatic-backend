@@ -152,7 +152,6 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'madrasaticApp.serializers.CustomPasswordResetSerializer'
                       }
 
 
