@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .models import Myuser, role_choices 
 from django.core.mail import send_mail
 from django.conf import settings
-from dj_rest_auth.serializers import PasswordResetSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer , UserDetailsSerializer 
 
 class CustomRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField()
@@ -65,7 +65,7 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
             instance.is_superuser = True
         instance.role = validated_data.get('role', instance.role)
             
-        if instance.is_banned != validated_data.get('is_banned'):
+        if instance.is_active != validated_data.get('is_active'):
             if validated_data.get('is_active') == True:
                 account = 'has been activated'
             else :
@@ -89,5 +89,19 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
 
     class Meta :
         model = Myuser
-        fields = ['username','address','tel','img']
-        lookup_field = 'uid'
+        fields = ['username','address','tel','img','email']
+        read_only_fields = ['email']
+
+        
+
+class CustomUserDetailSerializer(UserDetailsSerializer):
+    username = serializers.CharField(max_length = 150)
+    img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
+    tel = serializers.CharField(max_length = 10)
+    address = serializers.CharField(max_length = 150) 
+
+    class Meta :
+        model = Myuser
+        fields = ['id','username','email','address','tel','img']
+        lookup_field = 'id'
+        read_only_fields = ['email']

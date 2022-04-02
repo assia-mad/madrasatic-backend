@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -45,10 +46,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'madrasaticApp',
     'rest_framework_swagger',
     'corsheaders',
-    'drf_yasg',    
+    'drf_yasg',
+    'madrasaticApp',    
 ]
 
 AUTH_USER_MODEL = 'madrasaticApp.Myuser'
@@ -152,6 +153,7 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'madrasaticApp.serializers.CustomLoginSerializer',
+     'USER_DETAILS_SERIALIZER': 'madrasaticApp.serializers.CustomUserDetailSerializer',
                       }
 
 
@@ -178,6 +180,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': 'django_filters.rest_framework.DjangoFilterBackend',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
