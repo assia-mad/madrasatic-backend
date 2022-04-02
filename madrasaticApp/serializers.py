@@ -92,14 +92,11 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         fields = ['username','address','tel','img','email']
         read_only_fields = ['email']
 
-        
-
 class CustomUserDetailSerializer(UserDetailsSerializer):
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
     tel = serializers.CharField(max_length = 10)
     address = serializers.CharField(max_length = 150) 
-
     class Meta :
         model = Myuser
         fields = ['id','username','email','address','tel','img']
