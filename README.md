@@ -17,3 +17,5 @@
    py manage.py runserver
    pour creer un admin de projet : py manage.py createsuperuser
    
+# install all packages 
+Run pip install -r requirements.txt (Python 2), or pip3 install -r requirements.txt (Python 3)
