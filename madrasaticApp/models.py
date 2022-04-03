@@ -1,4 +1,5 @@
 from email.policy import default
+from imp import NullImporter
 from unicodedata import numeric
 from django.db import models 
 from django.contrib.auth.models import AbstractUser
@@ -20,4 +21,4 @@ class Myuser(AbstractUser):
     address = models.CharField(max_length=150, blank=True)
     tel = models.CharField(max_length=10,validators=[num_only])
     is_banned = models.BooleanField(default=False)
-    img = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100,default='/madrasatic/media/defaultuser.png')
+    img = models.ImageField(upload_to='profile_images/', max_length=100, blank = True , null = True , verbose_name='user_img')

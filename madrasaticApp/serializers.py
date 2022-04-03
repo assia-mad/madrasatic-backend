@@ -1,4 +1,5 @@
 
+from asyncio.windows_events import NULL
 from dataclasses import fields
 import email
 from email.policy import default
@@ -31,14 +32,13 @@ class CustomLoginSerializer(LoginSerializer):
     username = None
 
 class ManageusersSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(default = NULL)
     is_active = serializers.BooleanField( default=True)
     is_banned = serializers.BooleanField(default=False)
     role  = serializers.ChoiceField(choices=role_choices , default=role_choices[0])
     username = serializers.CharField()
     is_superuser = serializers.BooleanField(default=False)
-    img = serializers.ImageField(default ='/madrasatic/media/defaultuser.png')
-
+    img = serializers.ImageField(default = NULL)
     def validate_email(self, email):
         domain = email.split('@')[1]
         domain_list = ["esi-sba.dz",]
@@ -83,7 +83,7 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
 
 class UpdateProfileSerializer(serializers.ModelSerializer):  
     username = serializers.CharField(max_length = 150)
-    img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
+    img = serializers.ImageField(default = NULL)
     tel = serializers.CharField(max_length = 10)
     address = serializers.CharField(max_length = 150) 
 
@@ -94,7 +94,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
 
 class CustomUserDetailSerializer(UserDetailsSerializer):
     username = serializers.CharField(max_length = 150)
-    img = serializers.ImageField(default = '/madrasatic/media/defaultuser.png')
+    img = serializers.ImageField(default = NULL)
     tel = serializers.CharField(max_length = 10)
     address = serializers.CharField(max_length = 150) 
     class Meta :
