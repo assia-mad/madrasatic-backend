@@ -177,7 +177,7 @@ STATIC_URL = 'static/'
 
 
 # media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/madrasatic/media/'
 MEDIA_URL = '/madrasatic/media/'
 
 # Default primary key field type
@@ -186,13 +186,13 @@ MEDIA_URL = '/madrasatic/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': 'django_filters.rest_framework.DjangoFilterBackend',
+    'DEFAULT_FILTER_BACKENDS': [ 'django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': ('rest_framework.pagination.PageNumberPagination'),
     'PAGE_SIZE': 5
 }
 # SECURITY WARNING: don't run with debug turned on in production!

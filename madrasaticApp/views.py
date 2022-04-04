@@ -31,4 +31,4 @@ class UpdateprofileView(viewsets.GenericViewSet , mixins.UpdateModelMixin,mixins
     queryset = Myuser.objects.all()
     serializer_class = UpdateProfileSerializer
     permission_classes = [IsAuthenticatedAndOwner]
-    parser_classes = [FormParser, JSONParser, MultiPartParser]
+    #parser_classes = [FormParser, JSONParser, MultiPartParser]
