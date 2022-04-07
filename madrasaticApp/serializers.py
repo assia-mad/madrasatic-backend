@@ -92,9 +92,12 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(allow_null=True)
     tel = serializers.CharField(max_length = 10)
+    role = serializers.ChoiceField(choices= role_choices)
+    is_superuser  = serializers.BooleanField()
+    is_active = serializers.BooleanField()
     address = serializers.CharField(max_length = 150) 
     class Meta :
         model = Myuser
-        fields = ['id','username','email','address','tel','img']
+        fields = ['id','username','email','address','tel','img','role','is_superuser', 'is_active']
         lookup_field = 'id'
-        read_only_fields = ['email']
+        read_only_fields = ['email', 'id','role','is_active','is_superuser']
