@@ -10,6 +10,7 @@ from django.core.validators import RegexValidator
 role_choices = [('Utilisateur','User'),
                 ('Responsable','Responsable'),
                 ('Admin','Admin'),
+                ('Service','Service'),
                       ]
 
 num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')

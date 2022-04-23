@@ -1,4 +1,3 @@
-from email.policy import default
 from telnetlib import LOGOUT
 from dj_rest_auth.registration.serializers import RegisterSerializer 
 from dj_rest_auth.serializers import LoginSerializer , PasswordResetSerializer
