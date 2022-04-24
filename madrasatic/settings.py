@@ -70,7 +70,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'futuristic22community@gmail.com'
-EMAIL_HOST_PASSWORD = 'Aa12345aA'
+EMAIL_HOST_PASSWORD = 'frsvosmdytaiaxna'
 EMAIL_PORT = 587
 
 
