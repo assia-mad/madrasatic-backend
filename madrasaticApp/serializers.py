@@ -1,8 +1,9 @@
+from dataclasses import fields
 from telnetlib import LOGOUT
 from dj_rest_auth.registration.serializers import RegisterSerializer 
 from dj_rest_auth.serializers import LoginSerializer , PasswordResetSerializer
 from rest_framework import serializers
-from .models import Myuser, role_choices 
+from .models import Declaration, Myuser, role_choices , Declaration , levels, states
 from django.core.mail import send_mail
 from django.conf import settings
 from dj_rest_auth.serializers import PasswordResetSerializer , UserDetailsSerializer 
@@ -43,7 +44,7 @@ class ManageusersSerializer(serializers.ModelSerializer):
 
     class Meta :
         model = Myuser
-        fields = ['username','email','role','is_active','is_superuser','is_banned','img']
+        fields = ['id','username','email','role','is_active','is_superuser','is_banned','img']
 
 class UpdateUsersByAdminSerializer(serializers.Serializer):
     role  = serializers.ChoiceField(choices=role_choices , default=role_choices[0])
@@ -100,3 +101,15 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
         fields = ['id','username','email','address','tel','img','role','is_superuser', 'is_active']
         lookup_field = 'id'
         read_only_fields = ['email', 'id','role','is_active','is_superuser']
+
+class ResponsableDeclarationSerializer (serializers.ModelSerializer):
+    class Meta : 
+        model = Declaration
+        fields = ['user','title','description','location','priority','status','image','created_on','modified_at','validated_at']
+
+    def validate(self, attrs):
+        return attrs.status != 'draft'
+    
+
+
+

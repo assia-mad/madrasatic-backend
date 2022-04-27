@@ -60,12 +60,10 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGOUT_REDIRECT_URL = '/dj-rest-auth/login/'
-LOGIN_REDIRECT_URL = '# to do after'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = 'http://localhost:8000/madrasatic/login'
+LOGIN_URL = 'http://localhost:3000/madrasatic/login'
 REST_AUTH_PW_RESET_USE_SITES_DOMAIN = True
 SITE_ID = 4
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -90,9 +88,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     
+    
 ]
+    
+
 
 ROOT_URLCONF = 'madrasatic.urls'
 
@@ -159,7 +161,7 @@ REST_AUTH_SERIALIZERS = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -202,7 +204,3 @@ CORS_ORIGIN_WHITELIST = (
     'http://frontend:3000',
     'http://0.0.0.0:3000',
 )
-
-
-
-
