@@ -19,6 +19,7 @@ class AdminAuthenticationPermission(permissions.BasePermission):
         return bool(user.is_authenticated and user.is_superuser )
 
 
+
 #modification par l'auteur
 class DeclarationUserWritePermission(BasePermission):
     message = 'Modifier une déclaration ne peut être fait que par son auteur.'
