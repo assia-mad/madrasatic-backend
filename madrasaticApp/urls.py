@@ -4,7 +4,7 @@ from rest_framework import routers
 from django.http import HttpResponse
 from dj_rest_auth.registration.views import RegisterView, VerifyEmailView , ConfirmEmailView
 from dj_rest_auth.views import UserDetailsView, LoginView, LogoutView , PasswordResetView , PasswordResetConfirmView , PasswordChangeView
-from .views import ManageUsersView , UpdateprofileView
+from .views import *
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -25,6 +25,7 @@ schema_view = get_schema_view(
 router = routers.DefaultRouter()
 router.register(r'manageusers', ManageUsersView , basename='manageusers')
 router.register(r'updateprofile',UpdateprofileView , basename='updateprofile')
+router.register(r'responsable_declarations',ResponsableDeclarationslist, basename='declaration_view')
 
 urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',
@@ -46,5 +47,14 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+     #selectionner les déclarations enregistrées comme brouillon
+    path('saveddeclarationslist/', SavedDeclarationList.as_view()), 
+    #selectionner toutes les déclarations publiées
+    path('declarationslist/', DeclarationList.as_view()), 
+    # declaration rejection endpoint
+    path('declaration_rejection/',DeclarationRejectionView.as_view()),
+    # declaration complement demand endpoint
+    path('declaration_complement_demand/',DeclarationComplementDemandView.as_view()),
+
 ]
 urlpatterns += router.urls

@@ -1,9 +1,8 @@
-from dataclasses import fields
-from telnetlib import LOGOUT
 from dj_rest_auth.registration.serializers import RegisterSerializer 
 from dj_rest_auth.serializers import LoginSerializer , PasswordResetSerializer
+from requests import request
 from rest_framework import serializers
-from .models import Declaration, Myuser, role_choices , Declaration , levels, states
+from .models import *
 from django.core.mail import send_mail
 from django.conf import settings
 from dj_rest_auth.serializers import PasswordResetSerializer , UserDetailsSerializer 
@@ -102,14 +101,32 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
         lookup_field = 'id'
         read_only_fields = ['email', 'id','role','is_active','is_superuser']
 
+
+class DeclarationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MDeclaration
+        fields = ('id', 'titre', 'auteur', 'objet', 'corps', 'etat')
+
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     class Meta : 
-        model = Declaration
-        fields = ['user','title','description','location','priority','status','image','created_on','modified_at','validated_at']
-
-    def validate(self, attrs):
-        return attrs.status != 'draft'
+        model = MDeclaration
+        fields = ['id', 'titre', 'auteur', 'objet', 'corps', 'etat']
+    def create(self, validated_data):
+        if validated_data.get('user') == None:
+            validated_data['user'] = request.user
+        return super().create(validated_data)
     
+class DeclarationRejectionSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = MDeclarationRejection
+        fields = ['id','responsable','reason','declaration','created_on']
+        lookup_field = ['id']    
+    def create(self, validated_data):
+        return super().create(validated_data)
 
-
-
+# Declaration complement demand serializer
+class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeclarationComplementDemand
+        fields = ['id', 'responsable', 'description', 'declaration', 'created_on']
+        lookup_field = ['id']
