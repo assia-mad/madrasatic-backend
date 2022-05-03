@@ -25,42 +25,57 @@ class Myuser(AbstractUser):
 
 # declaration model
 class MDeclaration(models.Model):
-    
-    #selectionner et afficher seulement les déclarations publiées (pour tout le monde)
-    class DeclarationPObjects(models.Manager):
-        def get_queryset(self):
-            return super().get_queryset().filter(etat='publiée')
-
-    #selectionner et afficher seulement les déclarations enregistrées (la liste des brouillon pour l'utilisateur)
-    class DeclarationBObjects(models.Manager):
-        def get_object(self):
-            return super().get_queryset().filter(etat='brouillon') 
 
     options = (
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
     )
 
-    titre = models.CharField(max_length=250)
+    niveaux = (
+
+        (1, 'Urgence'),
+        (2, 'Etat critique'),
+        (3, 'Etat normal'),
+
+    )
+
+    catégories = (
+
+        ('higène', 'Higène'),
+        ('entretien', 'Entretien'),
+        ('santé', 'Santé'),
+        ('sécurité', 'Sécurité'),
+        ('technique', 'Technique'),
+        ('objet perdu', 'Objet perdu'),
+        ('autre', 'Autre'),
+
+    )
+
+    catégorie = models.CharField(max_length=50, choices=catégories, default='Autre')
+    lieu = models.CharField(max_length=50, null = True)
+    priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
-    corps = models.TextField()
+    corps = models.TextField(null=True)
     publiée = models.DateTimeField(default=timezone.now)
-    auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_Declarations')
+    auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
         #cascade: supprimer un  compte c'est supprimer toutes les déclarations faites par lui
 
     etat = models.CharField(max_length=10, choices=options, default='brouillon')
+    image = models.ImageField(upload_to='declaration_images/', null = True)
+
     objects = models.Manager()  # default manager
-    declarationpobjects = DeclarationPObjects()  # custom manager
-    declarationbobjects = DeclarationBObjects()  # custom manager
 
     class Meta:
-        ordering = ('-publiée',) #ordre par date de déclaration
+        ordering = ('-publiée', '-priorité') #ordre par date de déclaration
 
     def __str__(self):
         return self.titre
-# declaration complement rejection
-class MDeclarationRejection(models.Model):
-    responsable = models.ForeignKey(get_user_model(), related_name='declarations_rejections', on_delete=models.CASCADE)
+
+
+
+
+        return self.titre
+model(), related_name='declarations_rejections', on_delete=models.CASCADE)
     reason = models.CharField(max_length=200)
     declaration = models.OneToOneField(MDeclaration, related_name='rejection', on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)

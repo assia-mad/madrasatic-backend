@@ -37,15 +37,50 @@ class UpdateprofileView(viewsets.GenericViewSet , mixins.UpdateModelMixin,mixins
     permission_classes = [IsAuthenticatedAndOwner]
     parser_classes = [FormParser, JSONParser, MultiPartParser]
 
-class DeclarationList(generics.ListCreateAPIView):
+#liste des déclarations
+class DeclarationList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = MDeclaration.declarationpobjects.all()
+    queryset = MDeclaration.objects.filter(etat='publiée')
     serializer_class = DeclarationSerializer
 
-class SavedDeclarationList(generics.ListAPIView, DeclarationUserWritePermission):
-    permission_classes = [DeclarationUserWritePermission]
-    queryset = MDeclaration.declarationbobjects.all()
+#Création d'une déclaration
+class DeclarationCreate(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DeclarationSerializer 
+    parser_classes = [FormParser, JSONParser, MultiPartParser] 
+
+#Déclarations enregistrées comme brouillon
+class SavedDeclarationList(generics.ListAPIView):
+    permission_classes = [IsAuthenticatedAndOwner]
+    queryset = MDeclaration.objects.filter(etat='brouillon')
     serializer_class = DeclarationSerializer
+
+    #afficher seulement les brouillon faits par l'utilisateur en question
+    def get_queryset(self):
+        user = self.request.user
+        return MDeclaration.objects.filter(auteur=user, etat='brouillon')
+
+#Modifier un brouillon
+class EditDeclaration(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DeclarationSerializer
+    queryset = MDeclaration.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return MDeclaration.objects.filter(auteur=user, etat='brouillon')
+
+#Supprimer un brouillon
+class DeleteDeclaration(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = DeclarationSerializer
+    queryset = MDeclaration.objects.all() 
+
+    
+    def get_queryset(self):
+        user = self.request.user
+        return MDeclaration.objects.filter(auteur=user, etat='brouillon')
+
 
 # declaration non draft for responsable
 class ResponsableDeclarationslist(viewsets.ModelViewSet):
@@ -53,12 +88,12 @@ class ResponsableDeclarationslist(viewsets.ModelViewSet):
     serializer_class = ResponsableDeclarationSerializer
     permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filter_fields = ['titre', 'etat','auteur' ,'publiée']
-    filterset_fields = ['titre', 'etat','auteur', 'publiée']
-    search_fields = ['auteur__uid', 'titre', 'etat','publiée']
-    ordering_fields = ['auteur', 'titre', 'etat','publiée']
-# reject declaration view
-class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
+    filter_fields = ['objet', 'etat','auteur' ,'publiée']
+    filterset_fields = ['objet', 'etat','auteur', 'publiée']
+    search_fields = ['auteur__uid', 'objet', 'etat','publiée']
+    ordering_fields = ['auteur', 'objet', 'etat','publiée']
+ ['auteur', 'titre', 'etat','publiée']
+APIView):
     queryset = MDeclarationRejection.objects.all()
     serializer_class = DeclarationRejectionSerializer
     permission_classes = [ResponsableAuthenticationPermission]

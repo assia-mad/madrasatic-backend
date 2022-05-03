@@ -47,12 +47,24 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
      #selectionner les déclarations enregistrées comme brouillon
     path('saveddeclarationslist/', SavedDeclarationList.as_view()), 
+
     #selectionner toutes les déclarations publiées
-    path('declarationslist/', DeclarationList.as_view()), 
-    # declaration rejection endpoint
-    path('declaration_rejection/',DeclarationRejectionView.as_view()),
+    path('declarationslist/', DeclarationList.as_view()),
+
+    #créer une déclaration
+    path('declarationcreate/', DeclarationCreate.as_view()),
+
+    #Modifier un brouillon
+    path('declarationedit/<int:pk>/', EditDeclaration.as_view()),
+
+    #Supprimer une déclaration
+    path('declarationdelete/<int:pk>/', DeleteDeclaration.as_view()),
+
+declarationslist/', DeclarationList.as_view()), 
+nRejectionView.as_view()),
     # declaration complement demand endpoint
     path('declaration_complement_demand/',DeclarationComplementDemandView.as_view()),
 

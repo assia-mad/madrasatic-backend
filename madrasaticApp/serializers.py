@@ -105,12 +105,12 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
 class DeclarationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MDeclaration
-        fields = ('id', 'titre', 'auteur', 'objet', 'corps', 'etat')
+        fields = ('id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image')
 
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     class Meta : 
         model = MDeclaration
-        fields = ['id', 'titre', 'auteur', 'objet', 'corps', 'etat']
+        fields = ['id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'etat']
     def create(self, validated_data):
         if validated_data.get('user') == None:
             validated_data['user'] = request.user
