@@ -7,14 +7,13 @@ from django.core.mail import send_mail
 from django.conf import settings
 from dj_rest_auth.serializers import PasswordResetSerializer , UserDetailsSerializer 
 
+
 class CustomRegisterSerializer(RegisterSerializer):
+
     email = serializers.EmailField()
-    password1 = serializers.CharField( write_only=True,
-                                    required=True,
-                                    style={'input_type': 'password', })
-    password2 = serializers.CharField( write_only=True,
-                                    required=True,
-                                    style={'input_type': 'password', })
+    password1 = serializers.CharField( write_only=True, required=True, style={'input_type': 'password', })
+    password2 = serializers.CharField( write_only=True, required=True, style={'input_type': 'password', })
+    
     def validate_email(self, email):
         super().validate_email(email)
         domain = email.split('@')[1]
@@ -23,10 +22,14 @@ class CustomRegisterSerializer(RegisterSerializer):
             raise serializers.ValidationError("Please enter an Email Address with a valid domain")
         return email
 
+
 class CustomLoginSerializer(LoginSerializer):
+    
     username = None
 
+
 class ManageusersSerializer(serializers.ModelSerializer):
+
     email = serializers.EmailField()
     is_active = serializers.BooleanField( default=True)
     is_banned = serializers.BooleanField(default=False)
@@ -34,6 +37,7 @@ class ManageusersSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     is_superuser = serializers.BooleanField(default=False)
     img = serializers.ImageField()
+
     def validate_email(self, email):
         domain = email.split('@')[1]
         domain_list = ["esi-sba.dz",]
@@ -45,10 +49,13 @@ class ManageusersSerializer(serializers.ModelSerializer):
         model = Myuser
         fields = ['id','username','email','role','is_active','is_superuser','is_banned','img']
 
+
 class UpdateUsersByAdminSerializer(serializers.Serializer):
+
     role  = serializers.ChoiceField(choices=role_choices , default=role_choices[0])
     is_active = serializers.BooleanField( default=True)
     is_banned = serializers.BooleanField(default=False)
+
     def update(self, instance, validated_data):
         if instance.role != validated_data.get('role') :
             subject = ' role changed'
@@ -76,7 +83,9 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
         instance.save()
         return instance   
 
+
 class UpdateProfileSerializer(serializers.ModelSerializer):  
+
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(allow_null=True)
     tel = serializers.CharField(max_length = 10)
@@ -87,7 +96,9 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         fields = ['username','address','tel','img','email']
         read_only_fields = ['email']
 
+
 class CustomUserDetailSerializer(UserDetailsSerializer):
+
     username = serializers.CharField(max_length = 150)
     img = serializers.ImageField(allow_null=True)
     tel = serializers.CharField(max_length = 10)
@@ -95,6 +106,7 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
     is_superuser  = serializers.BooleanField()
     is_active = serializers.BooleanField()
     address = serializers.CharField(max_length = 150) 
+
     class Meta :
         model = Myuser
         fields = ['id','username','email','address','tel','img','role','is_superuser', 'is_active']
@@ -103,29 +115,38 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
 
 
 class DeclarationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = MDeclaration
         fields = ('id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image')
 
+
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
+
     class Meta : 
         model = MDeclaration
         fields = ['id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'etat']
+
     def create(self, validated_data):
         if validated_data.get('user') == None:
             validated_data['user'] = request.user
         return super().create(validated_data)
     
+
 class DeclarationRejectionSerializer(serializers.ModelSerializer):
+
     class Meta :
         model = MDeclarationRejection
         fields = ['id','responsable','reason','declaration','created_on']
         lookup_field = ['id']    
+
     def create(self, validated_data):
         return super().create(validated_data)
 
+
 # Declaration complement demand serializer
 class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = DeclarationComplementDemand
         fields = ['id', 'responsable', 'description', 'declaration', 'created_on']

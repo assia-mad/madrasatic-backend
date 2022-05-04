@@ -5,16 +5,20 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.conf import settings
 
-# Create your models here.
 #role choices
-role_choices = [('Utilisateur','User'),
-                ('Responsable','Responsable'),
-                ('Admin','Admin'),
-                ('Service','Service'),
-                      ]
+role_choices = [
+    
+    ('Utilisateur','User'),
+    ('Responsable','Responsable'),
+    ('Admin','Admin'),
+    ('Service','Service'),
+]
+
 num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')
+
 # madrasatic USER model
-class Myuser(AbstractUser):    
+class Myuser(AbstractUser):   
+
     first_name = None
     last_name = None
     role = models.CharField(max_length=30 , choices=role_choices , default=role_choices[0])
@@ -27,8 +31,10 @@ class Myuser(AbstractUser):
 class MDeclaration(models.Model):
 
     options = (
+
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
+
     )
 
     niveaux = (
@@ -58,31 +64,34 @@ class MDeclaration(models.Model):
     corps = models.TextField(null=True)
     publiée = models.DateTimeField(default=timezone.now)
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-        #cascade: supprimer un  compte c'est supprimer toutes les déclarations faites par lui
-
+    #cascade: supprimer un  compte c'est supprimer toutes les déclarations faites par lui
     etat = models.CharField(max_length=10, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
 
     objects = models.Manager()  # default manager
 
     class Meta:
+
         ordering = ('-publiée', '-priorité') #ordre par date de déclaration
 
     def __str__(self):
-        return self.titre
+
+        return self.objet
 
 
+# declaration complement rejection
+class MDeclarationRejection(models.Model):
 
-
-        return self.titre
-model(), related_name='declarations_rejections', on_delete=models.CASCADE)
+    responsable = models.ForeignKey(get_user_model(), related_name='declarations_rejections', on_delete=models.CASCADE)
     reason = models.CharField(max_length=200)
     declaration = models.OneToOneField(MDeclaration, related_name='rejection', on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
+
+
 # declaration complement demand model
 class DeclarationComplementDemand(models.Model):
-    responsable = models.ForeignKey(get_user_model(), related_name='declarations_complement_demands',
-                              on_delete=models.CASCADE)
+
+    responsable = models.ForeignKey(get_user_model(), related_name='declarations_complement_demands', on_delete=models.CASCADE)
     declaration = models.ForeignKey(MDeclaration, related_name='complement_demands', on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)

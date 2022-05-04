@@ -7,4 +7,4 @@ admin.site.register(Myuser)
 
 @admin.register(MDeclaration)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'id', 'etat', 'auteur')
+    list_display = ('id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'image', 'auteur')
