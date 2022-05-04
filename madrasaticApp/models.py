@@ -39,6 +39,9 @@ class MDeclaration(models.Model):
     options = (
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
+        ('non traitée','non traitée'),
+        ('en cours de traitement','en cours de traitement'),
+        ('traitée','traitée'),
     )
 
     titre = models.CharField(max_length=250)
@@ -48,7 +51,7 @@ class MDeclaration(models.Model):
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_Declarations')
         #cascade: supprimer un  compte c'est supprimer toutes les déclarations faites par lui
 
-    etat = models.CharField(max_length=10, choices=options, default='brouillon')
+    etat = models.CharField(max_length=150, choices=options, default='brouillon')
     objects = models.Manager()  # default manager
     declarationpobjects = DeclarationPObjects()  # custom manager
     declarationbobjects = DeclarationBObjects()  # custom manager
@@ -71,4 +74,14 @@ class DeclarationComplementDemand(models.Model):
     declaration = models.ForeignKey(MDeclaration, related_name='complement_demands', on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
+
+# Notification model
+class Notification(models.Model):
+    title = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=True)
+    user = models.ForeignKey(get_user_model(), related_name='notification.user+', on_delete=models.CASCADE, blank=True, null=True)
+    responsable = models.ForeignKey(get_user_model(), related_name='notification.responsable+', on_delete=models.CASCADE, blank=True, null=True)
+    service = models.ForeignKey(get_user_model(), related_name='notification.service+', on_delete=models.CASCADE, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 

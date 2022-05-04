@@ -5,6 +5,7 @@ from rest_framework import serializers
 from .models import *
 from django.core.mail import send_mail
 from django.conf import settings
+from .notification_push import *
 from dj_rest_auth.serializers import PasswordResetSerializer , UserDetailsSerializer 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -111,18 +112,41 @@ class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     class Meta : 
         model = MDeclaration
         fields = ['id', 'titre', 'auteur', 'objet', 'corps', 'etat']
-    def create(self, validated_data):
-        if validated_data.get('user') == None:
-            validated_data['user'] = request.user
-        return super().create(validated_data)
-    
+# update just priority or service
+class UpdatedeclarationByResponsable(serializers.ModelSerializer):
+    class Meta :
+        model = MDeclaration
+        fields = ['id','etat'] # soon service
+          
 class DeclarationRejectionSerializer(serializers.ModelSerializer):
     class Meta :
         model = MDeclarationRejection
         fields = ['id','responsable','reason','declaration','created_on']
         lookup_field = ['id']    
-    def create(self, validated_data):
-        return super().create(validated_data)
+        def create(self, validated_data):
+            declaration = validated_data['declaration']
+            reason = validated_data['reason']
+            user = declaration.auteur
+            responsable = validated_data['responsable']
+            service = declaration.auteur
+            title = 'Rejet de declaration'
+            body = 'La déclaration : '+ declaration.body +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
+
+            instance = super().create(validated_data)
+            instance.declaration.etat= 'refusée'
+            instance.declaration.save()
+            # beams notification
+            print(user.uid)
+            push_notify(user.uid, responsable.uid, title, body)
+           # channels notification
+            data = {
+                'title': title,
+                'body': body
+            }
+            channel = u'Declaration'
+            event = u'Rejet'
+            channels_notify(channel, event, data)
+        
 
 # Declaration complement demand serializer
 class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
@@ -130,3 +154,17 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         model = DeclarationComplementDemand
         fields = ['id', 'responsable', 'description', 'declaration', 'created_on']
         lookup_field = ['id']
+
+#service Declarations
+class ServiceDeclarationsSerializer(serializers.ModelSerializer):
+    class Meta : 
+        model = MDeclaration
+        fields = ['id', 'titre', 'auteur', 'objet', 'corps', 'etat']
+        lookup_field = 'id'
+    
+# Notification Serializer
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'title', 'body', 'user', 'responsable', 'service', 'created_on']
+        lookup_field = 'id'

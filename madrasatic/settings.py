@@ -204,3 +204,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://frontend:3000',
     'http://0.0.0.0:3000',
 )
+#pusher keys
+PUSHER_APP_ID = '1403813'
+PUSHER_KEY = 'de9f2d804926fdc0838b'
+PUSHER_SECRET = 'aeaa3575cd0e3ad8a64b'
+PUSHER_CLUSTER = 'sa1'

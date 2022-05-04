@@ -26,6 +26,7 @@ router = routers.DefaultRouter()
 router.register(r'manageusers', ManageUsersView , basename='manageusers')
 router.register(r'updateprofile',UpdateprofileView , basename='updateprofile')
 router.register(r'responsable_declarations',ResponsableDeclarationslist, basename='declaration_view')
+router.register(r'notifications', NotificationView)
 
 urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',
@@ -55,6 +56,11 @@ urlpatterns = [
     path('declaration_rejection/',DeclarationRejectionView.as_view()),
     # declaration complement demand endpoint
     path('declaration_complement_demand/',DeclarationComplementDemandView.as_view()),
+    path('service_declarations/', ServiceDeclarationsView.as_view()),
+     # Beams
+    path('beams_auth/', BeamsAuthView.as_view(), name='beams_auth'),
+    # Pusher
+    path('pusher/auth', PusherAuthView.as_view() , name='pusher_auth'),
 
 ]
 urlpatterns += router.urls
