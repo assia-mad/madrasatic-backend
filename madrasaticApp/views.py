@@ -116,8 +116,9 @@ class ResponsableDeclarationslist(viewsets.ModelViewSet):
     def get_serializer_class(self):
         serializer_class = self.serializer_class
         if self.request.method == 'PUT':
-            serializer_class = 'UpdatedeclarationByResponsable'
+            serializer_class = UpdatedeclarationByResponsable
         return serializer_class
+    
 # reject declaration view
 class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
 
