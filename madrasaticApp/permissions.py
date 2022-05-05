@@ -13,7 +13,7 @@ class AdminAuthenticationPermission(permissions.BasePermission):
     ADMIN_ONLY_AUTH_CLASSES = [authentication.BasicAuthentication, authentication.TokenAuthentication]
     def has_permission(self, request, view):
         user = request.user
-        return bool(user.is_authenticated and user.is_superuser )
+        return bool(user.is_authenticated and (user.role) == 'Admin'  )
 
 #modification par l'auteur
 class DeclarationUserWritePermission(BasePermission):
@@ -25,7 +25,7 @@ class DeclarationUserWritePermission(BasePermission):
             return True
 
         return obj.author == request.user
-
+# is authenticated and responsable
 class ResponsableAuthenticationPermission(permissions.BasePermission):
     ADMIN_ONLY_AUTH_CLASSES = [authentication.BasicAuthentication, authentication.TokenAuthentication]
     def has_permission(self, request, view):

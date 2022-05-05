@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import Myuser , MDeclaration
+from .models import *
 
 # Register your models here.
 #to do
 admin.site.register(Myuser)
-
+admin.site.register(DeclarationComplementDemand)
+admin.site.register(MDeclarationRejection)
 @admin.register(MDeclaration)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'image', 'auteur')

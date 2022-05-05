@@ -6,8 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 
 #role choices
-role_choices = [
-    
+role_choices = [ 
     ('Utilisateur','User'),
     ('Responsable','Responsable'),
     ('Admin','Admin'),
@@ -18,14 +17,19 @@ num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')
 
 # madrasatic USER model
 class Myuser(AbstractUser):   
-
     first_name = None
     last_name = None
     role = models.CharField(max_length=30 , choices=role_choices , default=role_choices[0])
     address = models.CharField(max_length=150, blank=True)
-    tel = models.CharField(max_length=10,validators=[num_only])
+    tel = models.CharField(max_length=10,validators=[num_only],blank=True)
     is_banned = models.BooleanField(default=False)
     img = models.ImageField(upload_to='profile_images/', max_length=100, blank = True , null = True , verbose_name='user_img')
+
+# declaration category
+class Category(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    service = models.ForeignKey(get_user_model(), related_name='service', on_delete=models.CASCADE, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
 # declaration model
 class MDeclaration(models.Model):
@@ -34,9 +38,11 @@ class MDeclaration(models.Model):
 
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
+        ('non traitée','non traitée'),
+        ('en cours de traitement','en cours de traitement'),
+        ('traitée','traitée'),
 
     )
-
     niveaux = (
 
         (1, 'Urgence'),
@@ -45,19 +51,7 @@ class MDeclaration(models.Model):
 
     )
 
-    catégories = (
-
-        ('higène', 'Higène'),
-        ('entretien', 'Entretien'),
-        ('santé', 'Santé'),
-        ('sécurité', 'Sécurité'),
-        ('technique', 'Technique'),
-        ('objet perdu', 'Objet perdu'),
-        ('autre', 'Autre'),
-
-    )
-
-    catégorie = models.CharField(max_length=50, choices=catégories, default='Autre')
+    catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE)
     lieu = models.CharField(max_length=50, null = True)
     priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
@@ -65,8 +59,9 @@ class MDeclaration(models.Model):
     publiée = models.DateTimeField(default=timezone.now)
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     #cascade: supprimer un  compte c'est supprimer toutes les déclarations faites par lui
-    etat = models.CharField(max_length=10, choices=options, default='brouillon')
+    etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
+    parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
 
     objects = models.Manager()  # default manager
 
@@ -96,3 +91,12 @@ class DeclarationComplementDemand(models.Model):
     description = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
 
+
+# Notification model
+class Notification(models.Model):
+    title = models.CharField(max_length=200, blank=True)
+    body = models.TextField(blank=True)
+    user = models.ForeignKey(get_user_model(), related_name='notification.user+', on_delete=models.CASCADE, blank=True, null=True)
+    responsable = models.ForeignKey(get_user_model(), related_name='notification.responsable+', on_delete=models.CASCADE, blank=True, null=True)
+    service = models.ForeignKey(get_user_model(), related_name='notification.service+', on_delete=models.CASCADE, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
