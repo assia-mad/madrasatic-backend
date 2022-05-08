@@ -33,6 +33,7 @@ router.register(r'updateprofile',UpdateprofileView , basename='updateprofile')
 router.register(r'responsable_declarations',ResponsableDeclarationslist, basename='declaration_view')
 router.register(r'notifications', NotificationView)
 router.register(r'categories',CategorieView)
+router.register(r'service_declarations', ServiceDeclarationsView, basename='service_declarations')
 
 urlpatterns = [
 
@@ -73,7 +74,6 @@ urlpatterns = [
 
     # declaration complement demand endpoint
     path('declaration_complement_demand/',DeclarationComplementDemandView.as_view()),
-    path('service_declarations/', ServiceDeclarationsView.as_view()),
      # Beams
     path('beams_auth/', BeamsAuthView.as_view(), name='beams_auth'),
     # Pusher

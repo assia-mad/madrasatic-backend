@@ -138,7 +138,7 @@ class ResponsableDeclarationSerializer (serializers.ModelSerializer):
 class UpdatedeclarationByResponsable(serializers.ModelSerializer):
     class Meta :
         model = MDeclaration
-        fields = ['id','etat','catégorie']
+        fields = ['id','priorité','catégorie']
         lookup_field = ['id']   
           
 class DeclarationRejectionSerializer(serializers.ModelSerializer):
@@ -146,30 +146,30 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
     class Meta :
         model = MDeclarationRejection
         fields = ['id','responsable','reason','declaration','created_on']
-        lookup_field = ['id']    
-        def create(self, validated_data):
-            declaration = validated_data['declaration']
-            reason = validated_data['reason']
-            user = declaration.auteur
-            responsable = validated_data['responsable']
-            service = declaration.auteur
-            title = 'Rejet de declaration'
-            body = 'La déclaration : '+ declaration.body +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
-
-            instance = super().create(validated_data)
-            instance.declaration.etat= 'refusée'
-            instance.declaration.save()
-            # beams notification
-            print(user.uid)
-            push_notify(user.uid, responsable.uid, title, body)
-           # channels notification
-            data = {
-                'title': title,
-                'body': body
-            }
-            channel = u'Declaration'
-            event = u'Rejet'
-            channels_notify(channel, event, data)
+        lookup_field = ['id']  
+    def create(self, validated_data):
+        declaration = validated_data['declaration']
+        reason = validated_data['reason']
+        user = declaration.auteur
+        responsable = validated_data['responsable']
+        title = 'Rejet de declaration'
+        body = 'La déclaration : '+ declaration.objet +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
+        instance = super().create(validated_data)
+        instance.declaration.etat = 'non traitée'
+        instance.declaration.save()
+        # beams notification
+        print(user.id)
+        push_notify(user.id, responsable.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Declaration'
+        event = u'Rejet'
+        channels_notify(channel, event, data)
+        return validated_data 
+        
         
 
 

@@ -4,7 +4,7 @@ from rest_framework import  viewsets
 from .serializers import *
 from .models import *
 from rest_framework import permissions , mixins
-from .permissions import AdminAuthenticationPermission , IsAuthenticatedAndOwner , ResponsableAuthenticationPermission
+from .permissions import AdminAuthenticationPermission , IsAuthenticatedAndOwner , ResponsableAuthenticationPermission, ServiceAuthenticationPermission
 from .permissions import DeclarationUserWritePermission
 from .pagination import *
 from rest_framework.filters import  OrderingFilter , SearchFilter 
@@ -143,9 +143,16 @@ class DeclarationComplementDemandView(generics.CreateAPIView , generics.ListAPIV
     search_fields = ['responsable__uid', 'declaration__did', 'created_on']
     ordering_fields = ['responsable', 'declaration', 'created_on']
 
-class ServiceDeclarationsView(generics.ListAPIView , generics.UpdateAPIView):
+class ServiceDeclarationsView(viewsets.ModelViewSet):
     #queryset = MDeclaration.objects.filter(etat__in = ['en cours de traitement','traitée','non traitée'],auteur = request.user)
     serializer_class = ServiceDeclarationsSerializer
+    permission_classes = [ServiceAuthenticationPermission]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    filterset_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    search_fields = ['auteur__id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    ordering_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    
     def get_queryset(self):
         return MDeclaration.objects.filter(etat__in = ['en cours de traitement','traitée','non traitée'],catégorie__service = self.request.user)
 
