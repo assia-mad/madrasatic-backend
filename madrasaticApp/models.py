@@ -41,6 +41,8 @@ class MDeclaration(models.Model):
         ('non traitée','non traitée'),
         ('en cours de traitement','en cours de traitement'),
         ('traitée','traitée'),
+        ('rejetée','rejetée'),
+        ('incompléte','incompléte'),
 
     )
     niveaux = (

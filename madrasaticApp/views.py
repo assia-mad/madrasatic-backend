@@ -46,6 +46,11 @@ class UpdateprofileView(viewsets.GenericViewSet , mixins.UpdateModelMixin,mixins
     permission_classes = [IsAuthenticatedAndOwner]
     parser_classes = [FormParser, JSONParser, MultiPartParser]
 
+# list of services
+class ServiceListView(viewsets.ModelViewSet):
+    queryset = Myuser.objects.filter( role = 'Service')
+    serializer_class = ServiceSerializer
+
 #categories
 class CategorieView(viewsets.ModelViewSet):
     queryset = Category.objects.all()

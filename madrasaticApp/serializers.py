@@ -84,6 +84,12 @@ class UpdateUsersByAdminSerializer(serializers.Serializer):
         instance.save()
         return instance   
 
+#service serializer
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Myuser
+        fields = ['id','username','email','img','is_active']
+
 
 class UpdateProfileSerializer(serializers.ModelSerializer):  
 
@@ -155,7 +161,7 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
         title = 'Rejet de declaration'
         body = 'La déclaration : '+ declaration.objet +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
         instance = super().create(validated_data)
-        instance.declaration.etat = 'non traitée'
+        instance.declaration.etat = 'rejetée'
         instance.declaration.save()
         # beams notification
         print(user.id)
@@ -180,6 +186,28 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         model = DeclarationComplementDemand
         fields = ['id', 'responsable', 'description', 'declaration', 'created_on']
         lookup_field = ['id']
+    def create(self, validated_data):
+        declaration = validated_data['declaration']
+        reason = validated_data['description']
+        user = declaration.auteur
+        responsable = validated_data['responsable']
+        title = 'Demande de complement '
+        body = ' Le responsable' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' '+ reason
+        instance = super().create(validated_data)
+        instance.declaration.etat = 'incompléte'
+        instance.declaration.save()
+        # beams notification
+        print(user.id)
+        push_notify(user.id, responsable.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Declaration'
+        event = u'Demande complement'
+        channels_notify(channel, event, data)
+        return validated_data
 
 #service Declarations
 class ServiceDeclarationsSerializer(serializers.ModelSerializer):

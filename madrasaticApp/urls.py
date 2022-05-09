@@ -34,6 +34,7 @@ router.register(r'responsable_declarations',ResponsableDeclarationslist, basenam
 router.register(r'notifications', NotificationView)
 router.register(r'categories',CategorieView)
 router.register(r'service_declarations', ServiceDeclarationsView, basename='service_declarations')
+router.register(r'services_list',ServiceListView, basename='service list')
 
 urlpatterns = [
 
