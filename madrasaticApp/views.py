@@ -129,7 +129,7 @@ class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
 
     queryset = MDeclarationRejection.objects.all()
     serializer_class = DeclarationRejectionSerializer
-    permission_classes = [ResponsableAuthenticationPermission]
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['responsable', 'declaration', 'created_on']
     filterset_fields = ['responsable', 'declaration', 'created_on']
