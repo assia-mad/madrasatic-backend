@@ -144,7 +144,7 @@ class ResponsableDeclarationSerializer (serializers.ModelSerializer):
 class UpdatedeclarationByResponsable(serializers.ModelSerializer):
     class Meta :
         model = MDeclaration
-        fields = ['id','etat','priorité','catégorie']
+        fields = ['id','etat','priorité','catégorie','parent_declaration']
         lookup_field = ['id']   
           
 class DeclarationRejectionSerializer(serializers.ModelSerializer):
