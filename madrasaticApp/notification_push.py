@@ -9,8 +9,8 @@ Notification push with pusher Beams
 def push_notify(user_id, responsable_id, title, body):
 
     push_client = PushNotifications(
-            instance_id='65b0754a-0713-4b71-bc41-4d2abae63fc6',
-            secret_key='E1067A08CDB1C1F6DD92AF5CAFF4CA9C8F5B50740B6865B3CFACFC282A202A10',
+            instance_id='4a4e8ca8-c1da-42b3-bace-da94c8f6c095',
+            secret_key='51667486C8B2797CCF1B8FA4358326C1DD1B3307B15A3D916369ECFFB160ACD5',
             )
     response = push_client.publish_to_users(
             user_ids = [str(user_id), str(responsable_id)],

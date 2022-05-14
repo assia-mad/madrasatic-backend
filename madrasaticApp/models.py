@@ -28,7 +28,7 @@ class Myuser(AbstractUser):
 # declaration category
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    service = models.ForeignKey(get_user_model(), related_name='service', on_delete=models.CASCADE, blank=True, null=True)
+    service = models.ForeignKey(get_user_model(), related_name='service', on_delete=models.CASCADE, blank=True, null=True, default=None)
     created_on = models.DateTimeField(auto_now_add=True)
 
 # declaration model
@@ -53,7 +53,7 @@ class MDeclaration(models.Model):
 
     )
 
-    catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE)
+    catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE, null=True)
     lieu = models.CharField(max_length=50, null = True)
     priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
