@@ -131,20 +131,20 @@ class DeclarationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MDeclaration
-        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par')
+        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
 
 
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
 
     class Meta : 
         model = MDeclaration
-        fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par']
+        fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
         lookup_field = ['id']   
 # update just priority or service
 class UpdatedeclarationByResponsable(serializers.ModelSerializer):
     class Meta :
         model = MDeclaration
-        fields = ['id','etat','priorité','catégorie','parent_declaration']
+        fields = ['id','etat','priorité','catégorie','parent_declaration','confirmée_par','signalée_par']
         lookup_field = ['id']   
           
 class DeclarationRejectionSerializer(serializers.ModelSerializer):

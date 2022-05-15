@@ -65,6 +65,7 @@ class MDeclaration(models.Model):
     image = models.ImageField(upload_to='declaration_images/', null = True)
     parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
     confirmée_par = models.PositiveIntegerField(default=0)
+    signalée_par = models.PositiveIntegerField(default=0)
 
     objects = models.Manager()  # default manager
 
