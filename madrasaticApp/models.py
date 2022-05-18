@@ -12,6 +12,14 @@ role_choices = [
     ('Admin','Admin'),
     ('Service','Service'),
 ]
+#rapport states
+states = [
+    ('brouillon', 'Brouillon'),
+    ('publié', 'Publié'),
+    ('rejeté','rejeté'),
+    ('incomplet','incomplet'),
+]
+
 
 num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')
 
@@ -104,3 +112,14 @@ class Notification(models.Model):
     responsable = models.ForeignKey(get_user_model(), related_name='notification.responsable+', on_delete=models.CASCADE, blank=True, null=True)
     service = models.ForeignKey(get_user_model(), related_name='notification.service+', on_delete=models.CASCADE, blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
+
+#rapport 
+class Report(models.Model):
+    title = models.CharField(max_length=200)
+    desc = models.TextField()
+    service = models.ForeignKey(get_user_model(),related_name='reports', on_delete=models.CASCADE)
+    declaration = models.OneToOneField(MDeclaration , related_name='report', on_delete= models.CASCADE)
+    status = models.CharField(max_length=200, choices=states, default ='publié')
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(blank=True, null=True)
+    validated_at = models.DateTimeField(blank=True, null=True)

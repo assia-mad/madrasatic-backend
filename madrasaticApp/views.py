@@ -149,7 +149,6 @@ class DeclarationComplementDemandView(generics.CreateAPIView , generics.ListAPIV
     ordering_fields = ['responsable', 'declaration', 'created_on']
 
 class ServiceDeclarationsView(viewsets.ModelViewSet):
-    #queryset = MDeclaration.objects.filter(etat__in = ['en cours de traitement','traitée','non traitée'],auteur = request.user)
     serializer_class = ServiceDeclarationsSerializer
     permission_classes = [ServiceAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -229,3 +228,16 @@ class PusherAuthView(APIView):
             )
         
         return Response(auth)
+
+class DraftReportsView(viewsets.ModelViewSet):
+    queryset = Report.objects.filter(status = 'brouillon')
+    serializer_class = ReportSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    filterset_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    search_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    ordering_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+
+class ReportsView(viewsets.ModelViewSet):
+    queryset = Report.objects.exclude(status = 'brouillon')
+    serializer_class = ReportSerializer

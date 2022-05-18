@@ -222,3 +222,8 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = ['id','body', 'user', 'responsable', 'service', 'created_on']
         lookup_field = 'id'
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Report
+        fields = ['id','title','desc','service','declaration','status','created_on','validated_at','modified_at']
