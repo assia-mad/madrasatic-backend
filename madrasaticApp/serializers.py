@@ -213,7 +213,7 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
 class ServiceDeclarationsSerializer(serializers.ModelSerializer):
     class Meta : 
         model = MDeclaration
-        fields = ['id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image']
+        fields = ['id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
         lookup_field = 'id'
     
 # Notification Serializer
