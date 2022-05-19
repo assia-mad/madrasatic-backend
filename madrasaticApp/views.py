@@ -58,10 +58,15 @@ class CategorieView(viewsets.ModelViewSet):
 
 #liste des déclarations
 class DeclarationList(generics.ListAPIView):
-
     permission_classes = [permissions.IsAuthenticated]
     queryset = MDeclaration.objects.filter(etat='publiée')
     serializer_class = DeclarationSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    filterset_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    search_fields = ['auteur__id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    ordering_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    
 
 
 #Création d'une déclaration
@@ -78,6 +83,12 @@ class SavedDeclarationList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedAndOwner]
     queryset = MDeclaration.objects.filter(etat='brouillon')
     serializer_class = DeclarationSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    filterset_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    search_fields = ['auteur__id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
+    ordering_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
 
     #afficher seulement les brouillon faits par l'utilisateur en question
     def get_queryset(self):
@@ -170,8 +181,8 @@ class BeamsAuthView(APIView):
     def get(self, request, format=None):
         from pusher_push_notifications import PushNotifications
         push_client = PushNotifications(
-            instance_id='ab307d73-4586-4400-9add-179772d785bc',
-            secret_key='5ED9A60B53DDAA7DF5B55E6A1B08ED5881289C1D2B6B039D04F78C277E5ECD02',
+            instance_id='07664670-9ac3-47fb-b92f-1f54942f1d20',
+            secret_key='77D48F249287CAEFC9700E12DA6C8984DC2F37972BCBEE62D45528ECDE3F5B65',
             )
         user_id = str(request.user.uid)
         beams_token = push_client.generate_token(user_id)      
@@ -241,3 +252,28 @@ class DraftReportsView(viewsets.ModelViewSet):
 class ReportsView(viewsets.ModelViewSet):
     queryset = Report.objects.exclude(status = 'brouillon')
     serializer_class = ReportSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    filterset_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    search_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+    ordering_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
+
+class ReportRejectionView(generics.CreateAPIView, generics.ListAPIView):  
+    queryset = ReportRejection.objects.all()
+    serializer_class =  ReportRejectionSerializer
+    #permission_classes = [ResponsableAuthenticationPermission]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['responsable', 'report', 'created_on']
+    filterset_fields = ['responsable', 'report', 'created_on']
+    search_fields = ['responsable__id', 'report__id', 'created_on']
+    ordering_fields = ['responsable', 'report', 'created_on']
+
+class ReportComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
+    queryset = ReportComplementdemand.objects.all()
+    serializer_class = ReportComplementDemandSerializer
+    #permission_classes = [ResponsableAuthenticationPermission]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['responsable', 'report', 'created_on']
+    filterset_fields = ['responsable', 'report', 'created_on']
+    search_fields = ['responsable__id', 'report__id', 'created_on']
+    ordering_fields = ['responsable', 'report', 'created_on']

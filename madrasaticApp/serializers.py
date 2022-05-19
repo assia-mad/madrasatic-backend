@@ -158,7 +158,7 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
         reason = validated_data['reason']
         user = declaration.auteur
         responsable = validated_data['responsable']
-        title = 'Rejet de declaration'
+        title = 'Rejet de votre declaration'
         body = 'La déclaration : '+ declaration.objet +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
         instance = super().create(validated_data)
         instance.declaration.etat = 'rejetée'
@@ -191,7 +191,7 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         reason = validated_data['description']
         user = declaration.auteur
         responsable = validated_data['responsable']
-        title = 'Demande de complement '
+        title = 'Completer votre déclaration'
         body = ' Le responsable' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' '+ reason
         instance = super().create(validated_data)
         instance.declaration.etat = 'incompléte'
@@ -227,3 +227,16 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta :
         model = Report
         fields = ['id','title','desc','service','declaration','status','created_on','validated_at','modified_at']
+        lookup_field = 'id'
+
+class ReportRejectionSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = ReportRejection
+        fields = ['id','responsable', 'report','reason','created_on']
+        lookup_fields = 'id'
+
+class ReportComplementDemandSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = ReportComplementdemand
+        fields = ['id','responsable', 'report','description','created_on']
+        lookup_fields = 'id'

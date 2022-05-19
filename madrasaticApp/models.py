@@ -88,7 +88,6 @@ class MDeclaration(models.Model):
 
 # declaration complement rejection
 class MDeclarationRejection(models.Model):
-
     responsable = models.ForeignKey(get_user_model(), related_name='declarations_rejections', on_delete=models.CASCADE)
     reason = models.CharField(max_length=200)
     declaration = models.OneToOneField(MDeclaration, related_name='rejection', on_delete=models.CASCADE)
@@ -97,7 +96,6 @@ class MDeclarationRejection(models.Model):
 
 # declaration complement demand model
 class DeclarationComplementDemand(models.Model):
-
     responsable = models.ForeignKey(get_user_model(), related_name='declarations_complement_demands', on_delete=models.CASCADE)
     declaration = models.ForeignKey(MDeclaration, related_name='complement_demands', on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
@@ -123,3 +121,17 @@ class Report(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, null=True)
     validated_at = models.DateTimeField(blank=True, null=True)
+
+# report rejection
+class ReportRejection(models.Model):
+    responsable = models.ForeignKey(get_user_model(), related_name='report_rejection', on_delete=models.CASCADE)
+    reason = models.CharField(max_length=200)
+    report = models.OneToOneField(Report, related_name='rejection', on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+class ReportComplementdemand(models.Model):
+    responsable = models.ForeignKey(get_user_model(), related_name='reports_complement_demands', on_delete=models.CASCADE)
+    report = models.ForeignKey(Report, related_name='complement_demands', on_delete=models.CASCADE)
+    description = models.CharField(max_length=200)
+    created_on = models.DateTimeField(auto_now_add=True)
+

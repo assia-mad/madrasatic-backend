@@ -78,6 +78,10 @@ urlpatterns = [
 
     # declaration complement demand endpoint
     path('declaration_complement_demand/',DeclarationComplementDemandView.as_view()),
+    #report rejection
+    path('report_rejection/',ReportRejectionView.as_view()),
+    # report complement demand
+    path('report_complement_demand/',ReportComplementDemandView.as_view()),
      # Beams
     path('beams_auth/', BeamsAuthView.as_view(), name='beams_auth'),
     # Pusher
