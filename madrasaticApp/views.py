@@ -1,3 +1,4 @@
+from signal import signal
 from unicodedata import category
 from pyparsing import And
 from rest_framework import  viewsets
@@ -16,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 import pusher
 from rest_framework.parsers import JSONParser , MultiPartParser , FormParser
+from django.shortcuts import get_object_or_404
 
 # manage users by Admin
 class ManageUsersView(viewsets.ModelViewSet):
@@ -277,3 +279,4 @@ class ReportComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
     filterset_fields = ['responsable', 'report', 'created_on']
     search_fields = ['responsable__id', 'report__id', 'created_on']
     ordering_fields = ['responsable', 'report', 'created_on']
+     

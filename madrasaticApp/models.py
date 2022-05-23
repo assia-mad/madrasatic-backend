@@ -1,3 +1,4 @@
+from ast import Try
 from django.db import models 
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -16,12 +17,13 @@ role_choices = [
 states = [
     ('brouillon', 'Brouillon'),
     ('publié', 'Publié'),
-    ('rejeté','rejeté'),
+    ('validé','validé'),
     ('incomplet','incomplet'),
 ]
 
 
 num_only = RegexValidator(r'^[0-9]*$','only numbers are allowed')
+num_comma = RegexValidator(r'^[0-9]+(,[0-9]+)+$','num separated by comma')
 
 # madrasatic USER model
 class Myuser(AbstractUser):   
@@ -72,8 +74,8 @@ class MDeclaration(models.Model):
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
     parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
-    confirmée_par = models.PositiveIntegerField(default=0)
-    signalée_par = models.PositiveIntegerField(default=0)
+    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed')
+    signalée_par = models.ManyToManyField(get_user_model(),related_name='users_who_signaled')
 
     objects = models.Manager()  # default manager
 
@@ -134,4 +136,6 @@ class ReportComplementdemand(models.Model):
     report = models.ForeignKey(Report, related_name='complement_demands', on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
+
+
 

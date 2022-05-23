@@ -87,6 +87,7 @@ urlpatterns = [
     # Pusher
     path('pusher/auth', PusherAuthView.as_view() , name='pusher_auth'),
 
+
 ]
 
 urlpatterns += router.urls

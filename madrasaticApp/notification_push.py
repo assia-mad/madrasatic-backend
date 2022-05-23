@@ -10,8 +10,8 @@ def push_notify(user_id, responsable_id, title, body):
 
         push_client = PushNotifications(
 
-                instance_id='4a4e8ca8-c1da-42b3-bace-da94c8f6c095',
-                secret_key='51667486C8B2797CCF1B8FA4358326C1DD1B3307B15A3D916369ECFFB160ACD5',
+                instance_id='07664670-9ac3-47fb-b92f-1f54942f1d20',
+                secret_key='77D48F249287CAEFC9700E12DA6C8984DC2F37972BCBEE62D45528ECDE3F5B65',
         )
         response = push_client.publish_to_users(
                 user_ids = [str(user_id), str(responsable_id)],

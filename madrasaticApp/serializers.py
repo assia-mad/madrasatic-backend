@@ -1,5 +1,5 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer 
-from dj_rest_auth.serializers import LoginSerializer , PasswordResetSerializer
+from dj_rest_auth.serializers import LoginSerializer
 from requests import request
 from rest_framework import serializers
 from .models import *
@@ -131,15 +131,26 @@ class DeclarationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MDeclaration
-        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
-
+        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration')
+    
 
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
-
+    confirmée_par  = serializers.PrimaryKeyRelatedField(
+        queryset= Myuser.objects.all(),
+        many=True,
+        required=False
+    )
+    signalée_par  = serializers.PrimaryKeyRelatedField(
+        queryset= Myuser.objects.all(),
+        many=True,
+        required=False
+    )
     class Meta : 
         model = MDeclaration
         fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
-        lookup_field = ['id']   
+        lookup_field = ['id']
+        
+    
 # update just priority or service
 class UpdatedeclarationByResponsable(serializers.ModelSerializer):
     class Meta :
@@ -176,9 +187,6 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
         channels_notify(channel, event, data)
         return validated_data 
         
-        
-
-
 # Declaration complement demand serializer
 class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
 
@@ -215,7 +223,7 @@ class ServiceDeclarationsSerializer(serializers.ModelSerializer):
         model = MDeclaration
         fields = ['id', 'auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
         lookup_field = 'id'
-    
+
 # Notification Serializer
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
