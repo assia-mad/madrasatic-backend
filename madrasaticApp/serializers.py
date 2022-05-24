@@ -128,10 +128,20 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class DeclarationSerializer(serializers.ModelSerializer):
+    confirmée_par  = serializers.PrimaryKeyRelatedField(
+        queryset= Myuser.objects.all(),
+        many=True,
+        required=False
+    )
+    signalée_par  = serializers.PrimaryKeyRelatedField(
+        queryset= Myuser.objects.all(),
+        many=True,
+        required=False
+    )
 
     class Meta:
         model = MDeclaration
-        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration')
+        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
     
 
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
