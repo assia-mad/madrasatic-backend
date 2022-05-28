@@ -108,6 +108,8 @@ urlpatterns = [
 
    #Supprimer une annonce
    path('annoncedelete/<int:pk>/', DeleteAnnonce.as_view()),
+   #annonce rejection
+   path('annonce_rejection/', AnnonceRejectionView.as_view()),
 
 
 ]

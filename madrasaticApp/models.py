@@ -156,6 +156,7 @@ class Report(models.Model):
     service = models.ForeignKey(get_user_model(),related_name='reports', on_delete=models.CASCADE)
     declaration = models.OneToOneField(MDeclaration , related_name='report', on_delete= models.CASCADE)
     status = models.CharField(max_length=200, choices=states, default ='publié')
+    image = models.ImageField(upload_to='report_images/', blank = True , null = True , verbose_name='report_image')
     created_on = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, null=True)
     validated_at = models.DateTimeField(blank=True, null=True)

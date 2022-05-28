@@ -318,6 +318,11 @@ class AnnonceList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = AnnonceModel.objects.filter(etat='publiée')
     serializer_class = AnnonceSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
+    filterset_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
+    search_fields = ['auteur__id', 'objet', 'pubDate','dateFin', 'etat']
+    ordering_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
 
 
 #Création d'une annonce
@@ -360,4 +365,14 @@ class DeleteAnnonce(generics.RetrieveDestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
+
+class AnnonceRejectionView(generics.CreateAPIView, generics.ListAPIView):  
+    queryset = AnnonceRejection.objects.all()
+    serializer_class =  AnnonceRejectionSerializer
+    #permission_classes = [ResponsableAuthenticationPermission]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filter_fields = ['responsable', 'annonce', 'created_on']
+    filterset_fields = ['responsable', 'annonce', 'created_on']
+    search_fields = ['responsable__id', 'annonce__id', 'created_on']
+    ordering_fields = ['responsable', 'annonce', 'created_on']
      
