@@ -186,7 +186,7 @@ class AnnonceModel(models.Model):
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)
     pubDate = models.DateTimeField(default=timezone.now)
-    dateFin = models.DateTimeField(default=timezone.now)
+    dateFin = models.DateTimeField(blank=False , null=False)
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='annonces_images/', null = True)
