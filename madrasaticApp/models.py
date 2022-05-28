@@ -41,6 +41,42 @@ class Category(models.Model):
     service = models.ForeignKey(get_user_model(), related_name='service', on_delete=models.CASCADE, blank=True, null=True, default=None)
     created_on = models.DateTimeField(auto_now_add=True)
 
+# localisation model
+# site model
+class Site(models.Model):
+    
+    site = models.CharField(max_length=100, null = True)
+
+    def __str__(self):
+        return self.site
+
+# bloc model
+class Bloc(models.Model):
+
+    blocc = models.CharField(max_length=100, null = True)
+
+    def __str__(self):
+        return self.blocc
+
+#endroit model
+class Endroit(models.Model):
+
+    endroit = models.CharField(max_length=50, null = True)
+
+    def __str__(self):
+        return self.endroit
+
+#identification model
+class Identification(models.Model):
+
+    site = models.ForeignKey(Site,on_delete=models.CASCADE, null=True)
+    blocc = models.ForeignKey(Bloc,on_delete=models.CASCADE, null=True)
+    endroit = models.ForeignKey(Endroit,on_delete=models.CASCADE, null=True)
+    identification = models.CharField(max_length=100, null = True)
+
+    def __str__(self):
+        return self.identification
+
 # declaration model
 class MDeclaration(models.Model):
 
@@ -137,5 +173,37 @@ class ReportComplementdemand(models.Model):
     description = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
 
+# annonce model
+class AnnonceModel(models.Model):
 
+    options = (
 
+        ('brouillon', 'Brouillon'),
+        ('publiée', 'Publiée'),
+
+    )
+
+    objet = models.TextField(null=True)
+    corps = models.TextField(null=True)
+    pubDate = models.DateTimeField(default=timezone.now)
+    dateFin = models.DateTimeField(default=timezone.now)
+    auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    etat = models.CharField(max_length=100, choices=options, default='brouillon')
+    image = models.ImageField(upload_to='annonces_images/', null = True)
+
+    objects = models.Manager()
+
+    class Meta:
+
+        ordering = ('-pubDate',)
+
+    def __str__(self):
+
+        return self.objet
+
+# annonce rejection
+class AnnonceRejection(models.Model):
+    responsable = models.ForeignKey(get_user_model(), related_name='annonce_rejection', on_delete=models.CASCADE)
+    raison = models.CharField(max_length=200)
+    annonce = models.OneToOneField(AnnonceModel, related_name='rejection', on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True)

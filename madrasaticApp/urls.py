@@ -37,6 +37,10 @@ router.register(r'service_declarations', ServiceDeclarationsView, basename='serv
 router.register(r'services_list',ServiceListView, basename='service list')
 router.register(r'draft_reports',DraftReportsView, basename='draft_reports')
 router.register(r'reports',ReportsView, basename='reports')
+router.register(r'lieux',LocalisationView)
+router.register(r'endroits',EndroitView)
+router.register(r'blocs',BlocView)
+router.register(r'sites',SiteView)
 
 
 urlpatterns = [
@@ -86,6 +90,24 @@ urlpatterns = [
     path('beams_auth/', BeamsAuthView.as_view(), name='beams_auth'),
     # Pusher
     path('pusher/auth', PusherAuthView.as_view() , name='pusher_auth'),
+
+      #selectionner les annonces enregistrées comme brouillon
+   path('savedannonces/', SavedAnnonceList.as_view()), 
+
+   #selectionner toutes les annonces publiées
+   path('annonceslist/', AnnonceList.as_view()),
+
+   #selectionner toutes les annonces publiées d'un annonceur
+   path('mesannonces/', AnnonceurList.as_view()),
+
+   #créer une annonce
+   path('annoncecreate/', AnnonceCreate.as_view()),
+
+   #Modifier un brouillon
+   path('annonceedit/<int:pk>/', EditAnnonce.as_view()),
+
+   #Supprimer une annonce
+   path('annoncedelete/<int:pk>/', DeleteAnnonce.as_view()),
 
 
 ]

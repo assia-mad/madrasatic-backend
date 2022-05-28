@@ -58,6 +58,26 @@ class CategorieView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+#localisation
+class LocalisationView(viewsets.ModelViewSet):
+    queryset = Identification.objects.all()
+    serializer_class = LocalisationSerializer
+
+#endroit
+class EndroitView(viewsets.ModelViewSet):
+    queryset = Endroit.objects.all()
+    serializer_class = EndroitSerializer
+
+#bloc
+class BlocView(viewsets.ModelViewSet):
+    queryset = Bloc.objects.all()
+    serializer_class = BlocSerializer
+
+#site
+class SiteView(viewsets.ModelViewSet):
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
+
 #liste des déclarations
 class DeclarationList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -69,8 +89,6 @@ class DeclarationList(generics.ListAPIView):
     search_fields = ['auteur__id', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
     ordering_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
     
-
-
 #Création d'une déclaration
 class DeclarationCreate(generics.CreateAPIView):
 
@@ -279,4 +297,67 @@ class ReportComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
     filterset_fields = ['responsable', 'report', 'created_on']
     search_fields = ['responsable__id', 'report__id', 'created_on']
     ordering_fields = ['responsable', 'report', 'created_on']
+
+
+#liste des annonces d'un annonceur
+class AnnonceurList(generics.ListAPIView):
+
+    permission_classes = [IsAuthenticatedAndOwner]
+    queryset = AnnonceModel.objects.filter(etat='publiée')
+    serializer_class = AnnonceSerializer
+
+    #afficher seulement les annonces faites par l'annonceur en question
+    def get_queryset(self):
+        user = self.request.user
+        return AnnonceModel.objects.filter(auteur=user, etat='Publiée')
+
+
+#liste des annonces
+class AnnonceList(generics.ListAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = AnnonceModel.objects.filter(etat='publiée')
+    serializer_class = AnnonceSerializer
+
+
+#Création d'une annonce
+class AnnonceCreate(generics.CreateAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AnnonceSerializer 
+    parser_classes = [FormParser, JSONParser, MultiPartParser] 
+
+#Annonces enregistrées comme brouillon
+class SavedAnnonceList(generics.ListAPIView):
+
+    permission_classes = [IsAuthenticatedAndOwner]
+    queryset = AnnonceModel.objects.filter(etat='brouillon')
+    serializer_class = AnnonceSerializer
+
+    #afficher seulement les brouillon faits par l'annonceur en question
+    def get_queryset(self):
+
+        user = self.request.user
+        return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
+
+#Modifier un brouillon
+class EditAnnonce(generics.RetrieveUpdateAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AnnonceSerializer
+    queryset = AnnonceModel.objects.all()
+
+    def get_queryset(self):
+        user = self.request.user
+        return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
+
+#Supprimer un brouillon
+class DeleteAnnonce(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AnnonceSerializer
+    queryset = AnnonceModel.objects.all() 
+
+    def get_queryset(self):
+        user = self.request.user
+        return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
      

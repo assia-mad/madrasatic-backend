@@ -126,6 +126,26 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id','name','service','created_on']
 
+#localisation serialiser
+class LocalisationSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Identification
+        fields = ['id','site', 'blocc', 'endroit', 'identification']
+
+class EndroitSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Endroit
+        fields = ['id', 'endroit']
+
+class BlocSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Bloc
+        fields = ['id', 'blocc']
+
+class SiteSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Site
+        fields = ['id', 'site']
 
 class DeclarationSerializer(serializers.ModelSerializer):
     confirmée_par  = serializers.PrimaryKeyRelatedField(
@@ -143,7 +163,6 @@ class DeclarationSerializer(serializers.ModelSerializer):
         model = MDeclaration
         fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
     
-
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     confirmée_par  = serializers.PrimaryKeyRelatedField(
         queryset= Myuser.objects.all(),
@@ -258,3 +277,9 @@ class ReportComplementDemandSerializer(serializers.ModelSerializer):
         model = ReportComplementdemand
         fields = ['id','responsable', 'report','description','created_on']
         lookup_fields = 'id'
+
+#Annonce serializer
+class AnnonceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnnonceModel
+        fields = ('id', 'auteur', 'objet', 'corps', 'pubDate', 'etat', 'image')
