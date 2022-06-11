@@ -91,11 +91,9 @@ class DeclarationList(generics.ListAPIView):
     
 #Création d'une déclaration
 class DeclarationCreate(generics.CreateAPIView):
-
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = DeclarationSerializer 
     parser_classes = [FormParser, JSONParser, MultiPartParser] 
-
 
 #Déclarations enregistrées comme brouillon
 class SavedDeclarationList(generics.ListAPIView):
@@ -118,15 +116,10 @@ class SavedDeclarationList(generics.ListAPIView):
 
 #Modifier un brouillon
 class EditDeclaration(generics.RetrieveUpdateAPIView):
-
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = DeclarationSerializer
     queryset = MDeclaration.objects.all()
-
-    def get_queryset(self):
-        user = self.request.user
-        return MDeclaration.objects.filter(auteur=user, etat='brouillon')
-
+   
 #Supprimer un brouillon
 class DeleteDeclaration(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]

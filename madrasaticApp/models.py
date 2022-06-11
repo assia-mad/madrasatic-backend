@@ -100,7 +100,7 @@ class MDeclaration(models.Model):
     )
 
     catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE, null=True)
-    lieu = models.CharField(max_length=50, null = True)
+    lieu = models.ForeignKey(Identification , related_name='declaration_place',on_delete=models.CASCADE)
     priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)
@@ -110,7 +110,7 @@ class MDeclaration(models.Model):
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
     parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
-    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed')
+    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed' )
     signalée_par = models.ManyToManyField(get_user_model(),related_name='users_who_signaled')
 
     objects = models.Manager()  # default manager
