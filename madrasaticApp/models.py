@@ -12,6 +12,7 @@ role_choices = [
     ('Responsable','Responsable'),
     ('Admin','Admin'),
     ('Service','Service'),
+    ('Président du club','Président du club'),
 ]
 #rapport states
 states = [
@@ -52,7 +53,7 @@ class Site(models.Model):
 
 # bloc model
 class Bloc(models.Model):
-
+    site = models.ForeignKey(Site,on_delete=models.CASCADE, null=True)
     blocc = models.CharField(max_length=100, null = True)
 
     def __str__(self):
@@ -60,7 +61,7 @@ class Bloc(models.Model):
 
 #endroit model
 class Endroit(models.Model):
-
+    blocc = models.ForeignKey(Bloc,on_delete=models.CASCADE, null=True) 
     endroit = models.CharField(max_length=50, null = True)
 
     def __str__(self):
@@ -68,9 +69,6 @@ class Endroit(models.Model):
 
 #identification model
 class Identification(models.Model):
-
-    site = models.ForeignKey(Site,on_delete=models.CASCADE, null=True)
-    blocc = models.ForeignKey(Bloc,on_delete=models.CASCADE, null=True)
     endroit = models.ForeignKey(Endroit,on_delete=models.CASCADE, null=True)
     identification = models.CharField(max_length=100, null = True)
 
@@ -100,7 +98,10 @@ class MDeclaration(models.Model):
     )
 
     catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE, null=True)
-    lieu = models.ForeignKey(Identification , related_name='declaration_place',on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, related_name='declaration_site',on_delete= models.CASCADE)
+    bloc = models.ForeignKey(Bloc, related_name='declaration_bloc',on_delete= models.CASCADE)
+    endroit = models.ForeignKey(Endroit, related_name='declaration_endroit_type',on_delete= models.CASCADE)
+    lieu = models.ForeignKey(Identification, related_name='declaration_place',on_delete= models.CASCADE)
     priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)

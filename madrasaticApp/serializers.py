@@ -130,17 +130,17 @@ class CategorySerializer(serializers.ModelSerializer):
 class LocalisationSerializer(serializers.ModelSerializer):
     class Meta :
         model = Identification
-        fields = ['id','site', 'blocc', 'endroit', 'identification']
+        fields = ['id','endroit', 'identification']
 
 class EndroitSerializer(serializers.ModelSerializer):
     class Meta :
         model = Endroit
-        fields = ['id', 'endroit']
+        fields = ['id', 'endroit','blocc']
 
 class BlocSerializer(serializers.ModelSerializer):
     class Meta :
         model = Bloc
-        fields = ['id', 'blocc']
+        fields = ['id', 'blocc','site']
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta :
@@ -161,7 +161,7 @@ class DeclarationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MDeclaration
-        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
+        fields = ('id', 'auteur', 'publiée','priorité', 'catégorie', 'objet', 'corps','site','bloc','endroit', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par')
     
 class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     confirmée_par  = serializers.PrimaryKeyRelatedField(
@@ -176,7 +176,7 @@ class ResponsableDeclarationSerializer (serializers.ModelSerializer):
     )
     class Meta : 
         model = MDeclaration
-        fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
+        fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps','site','bloc','endroit','lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
         lookup_field = ['id']
         
     
