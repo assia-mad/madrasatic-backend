@@ -198,7 +198,7 @@ class BeamsAuthView(APIView):
             instance_id='07664670-9ac3-47fb-b92f-1f54942f1d20',
             secret_key='77D48F249287CAEFC9700E12DA6C8984DC2F37972BCBEE62D45528ECDE3F5B65',
             )
-        user_id = str(request.user.uid)
+        user_id = str(request.user.id)
         beams_token = push_client.generate_token(user_id)      
         # content = {
         #     'user': request.user.first_name,
@@ -308,9 +308,9 @@ class AnnonceurList(generics.ListAPIView):
 
 #liste des annonces
 class AnnonceList(generics.ListAPIView):
-    current = timezone.now()
+    current = datetime.now()
     permission_classes = [permissions.IsAuthenticated]
-    queryset = AnnonceModel.objects.filter(etat='publiée',datedebut__lte = current  , dateFin__gte = current)
+    queryset = AnnonceModel.objects.filter(etat='publiée', datedebut__lte = current ,dateFin__gt = current )
     serializer_class = AnnonceSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['auteur', 'objet','datedebut', 'pubDate','dateFin', 'etat']

@@ -1,3 +1,4 @@
+from email.mime import image
 from dj_rest_auth.registration.serializers import RegisterSerializer 
 from dj_rest_auth.serializers import LoginSerializer
 from requests import request
@@ -178,6 +179,32 @@ class ResponsableDeclarationSerializer (serializers.ModelSerializer):
         model = MDeclaration
         fields = ['id', 'auteur','publiée', 'priorité', 'catégorie', 'objet', 'corps','site','bloc','endroit','lieu', 'etat', 'image','parent_declaration','confirmée_par','signalée_par']
         lookup_field = ['id']
+    def update(self, instance, validated_data):
+        declaration_state = validated_data["etat"]
+        declaration_title = instance.objet
+        user = instance.auteur
+        responsable = Myuser.objects.filter(role='Responsable').first()
+        title = 'Déclaration modifiée'
+        body ='la déclaration '+ declaration_title + ' a été modifiée et le statut actuel: ' + declaration_state
+        # beams notif
+        push_notify(user.uid, responsable.uid, title, body)
+        # channels notif
+        data = {
+            'title': title,
+            'body' : body,
+            'status': declaration_state
+        }
+        channel = u'Declaration'
+        event = u'Modification'
+        channels_notify(channel, event, data)
+        # save the notification for users no logged in
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
+        return super().update(instance, validated_data)
         
     
 # update just priority or service
@@ -263,7 +290,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
     class Meta :
         model = Report
-        fields = ['id','title','desc','service','declaration','status','created_on','validated_at','modified_at']
+        fields = ['id','title','desc','image','service','declaration','status','created_on','validated_at','modified_at']
         lookup_field = 'id'
 
 class ReportRejectionSerializer(serializers.ModelSerializer):
@@ -271,12 +298,56 @@ class ReportRejectionSerializer(serializers.ModelSerializer):
         model = ReportRejection
         fields = ['id','responsable', 'report','reason','created_on']
         lookup_fields = 'id'
+    def create(self, validated_data):
+        report = validated_data['report']
+        reason = validated_data['raison']
+        user = report.service
+        responsable = validated_data['responsable']
+        title = 'votre rapport a été rejeté'
+        body = ' Le responsable' + responsable.username +'a rejeté votre : '+ report.title + ' '+ reason
+        instance = super().create(validated_data)
+        instance.report.status= 'rejetée'
+        instance.report.save()
+        # beams notification
+        print(user.id)
+        push_notify(user.id, responsable.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Report'
+        event = u'Rejet'
+        channels_notify(channel, event, data)
+        return validated_data
 
 class ReportComplementDemandSerializer(serializers.ModelSerializer):
     class Meta :
         model = ReportComplementdemand
         fields = ['id','responsable', 'report','description','created_on']
         lookup_fields = 'id'
+    def create(self, validated_data):
+        report = validated_data['report']
+        reason = validated_data['description']
+        user = report.service
+        print(user)
+        responsable = validated_data['responsable']
+        title = 'Compléter votre rapport'
+        body = ' Le responsable' + responsable.username +'vous demande de compléter votre rapport: '+ report.title + ' '+ reason
+        instance = super().create(validated_data)
+        instance.report.status= 'incomplet'
+        instance.report.save()
+        # beams notification
+        push_notify(user.id, responsable.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Report'
+        event = u'Demander complement'
+        channels_notify(channel, event, data)
+        return validated_data
 
 #Annonce serializer
 class AnnonceSerializer(serializers.ModelSerializer):
@@ -289,3 +360,25 @@ class AnnonceRejectionSerializer(serializers.ModelSerializer):
         model = AnnonceRejection
         fields = ['id','responsable', 'annonce','raison','created_on']
         lookup_fields = 'id'
+    def create(self, validated_data):
+        annonce = validated_data['annonce']
+        reason = validated_data['raison']
+        user = annonce.auteur
+        print(user)
+        responsable = validated_data['responsable']
+        title = 'votre annonce a été rejeté'
+        body = ' Le responsable' + responsable.username +'a rejeté votre annonce: '+ annonce.objet + ' '+ reason
+        instance = super().create(validated_data)
+        instance.annonce.etat='rejeté'
+        instance.annonce.save()
+        # beams notification
+        push_notify(user.id, responsable.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Annonce'
+        event = u'Rejet'
+        channels_notify(channel, event, data)
+        return validated_data

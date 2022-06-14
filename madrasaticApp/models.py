@@ -1,5 +1,5 @@
 from ast import Try
-from datetime import datetime
+from datetime import date, datetime
 from django.db import models 
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -183,14 +183,15 @@ class AnnonceModel(models.Model):
 
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
+        ('rejeté','rejeté')
 
     )
 
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)
     pubDate = models.DateTimeField(auto_now_add=True)#creation date
-    datedebut = models.DateTimeField(default= timezone.now) #start appear for users
-    dateFin = models.DateTimeField(blank=False , null=False) #stop appearing
+    datedebut = models.DateField(default=datetime.now,blank=True, null=True) #start appear for users
+    dateFin = models.DateField(blank=False , null=False) #stop appearing
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='annonces_images/', null = True,blank = True)
@@ -200,11 +201,9 @@ class AnnonceModel(models.Model):
     class Meta:
 
         ordering = ('-pubDate',)
-
     def __str__(self):
 
         return self.objet
-
 # annonce rejection
 class AnnonceRejection(models.Model):
     responsable = models.ForeignKey(get_user_model(), related_name='annonce_rejection', on_delete=models.CASCADE)
