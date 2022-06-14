@@ -58,26 +58,30 @@ class ServiceListView(viewsets.ModelViewSet):
 class CategorieView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
+    pagination_class = None
 #localisation
 class LocalisationView(viewsets.ModelViewSet):
     queryset = Identification.objects.all()
     serializer_class = LocalisationSerializer
+    pagination_class = None
 
 #endroit
 class EndroitView(viewsets.ModelViewSet):
     queryset = Endroit.objects.all()
     serializer_class = EndroitSerializer
+    pagination_class = None
 
 #bloc
 class BlocView(viewsets.ModelViewSet):
     queryset = Bloc.objects.all()
     serializer_class = BlocSerializer
+    pagination_class = None
 
 #site
 class SiteView(viewsets.ModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
+    pagination_class = None
 
 #liste des déclarations
 class DeclarationList(generics.ListAPIView):
