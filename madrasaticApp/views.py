@@ -261,6 +261,7 @@ class PusherAuthView(APIView):
 class DraftReportsView(viewsets.ModelViewSet):
     queryset = Report.objects.filter(status = 'brouillon')
     serializer_class = ReportSerializer
+    pagination_class = None
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
     filterset_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
@@ -270,6 +271,7 @@ class DraftReportsView(viewsets.ModelViewSet):
 class ReportsView(viewsets.ModelViewSet):
     queryset = Report.objects.exclude(status = 'brouillon')
     serializer_class = ReportSerializer
+    pagination_class = None
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
     filterset_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
