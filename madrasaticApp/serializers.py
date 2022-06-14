@@ -282,7 +282,7 @@ class ReportComplementDemandSerializer(serializers.ModelSerializer):
 class AnnonceSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnnonceModel
-        fields = ('id', 'auteur', 'objet', 'corps', 'pubDate','dateFin', 'etat', 'image')
+        fields = ('id', 'auteur', 'objet', 'corps','datedebut', 'pubDate','dateFin', 'etat', 'image')
 
 class AnnonceRejectionSerializer(serializers.ModelSerializer):
     class Meta :

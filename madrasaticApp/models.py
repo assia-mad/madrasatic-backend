@@ -1,4 +1,5 @@
 from ast import Try
+from datetime import datetime
 from django.db import models 
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
@@ -187,11 +188,12 @@ class AnnonceModel(models.Model):
 
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)
-    pubDate = models.DateTimeField(default=timezone.now)
-    dateFin = models.DateTimeField(blank=False , null=False)
+    pubDate = models.DateTimeField(auto_now_add=True)#creation date
+    datedebut = models.DateTimeField(default= timezone.now) #start appear for users
+    dateFin = models.DateTimeField(blank=False , null=False) #stop appearing
     auteur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
-    image = models.ImageField(upload_to='annonces_images/', null = True)
+    image = models.ImageField(upload_to='annonces_images/', null = True,blank = True)
 
     objects = models.Manager()
 

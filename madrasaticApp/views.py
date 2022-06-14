@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from signal import signal
 from unicodedata import category
 from pyparsing import And
@@ -307,15 +308,15 @@ class AnnonceurList(generics.ListAPIView):
 
 #liste des annonces
 class AnnonceList(generics.ListAPIView):
-
+    current = timezone.now()
     permission_classes = [permissions.IsAuthenticated]
-    queryset = AnnonceModel.objects.filter(etat='publiée')
+    queryset = AnnonceModel.objects.filter(etat='publiée',datedebut__lte = current  , dateFin__gte = current)
     serializer_class = AnnonceSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filter_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
-    filterset_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
-    search_fields = ['auteur__id', 'objet', 'pubDate','dateFin', 'etat']
-    ordering_fields = ['auteur', 'objet', 'pubDate','dateFin', 'etat']
+    filter_fields = ['auteur', 'objet','datedebut', 'pubDate','dateFin', 'etat']
+    filterset_fields = ['auteur', 'objet','datedebut', 'pubDate','dateFin', 'etat']
+    search_fields = ['auteur__id', 'objet','datedebut', 'pubDate','dateFin', 'etat']
+    ordering_fields = ['auteur', 'objet', 'datedebut','pubDate','dateFin', 'etat']
 
 
 #Création d'une annonce
