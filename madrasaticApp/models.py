@@ -183,7 +183,8 @@ class AnnonceModel(models.Model):
 
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
-        ('rejeté','rejeté')
+        ('validé','validé'),
+        ('rejeté','rejeté'),
 
     )
 
