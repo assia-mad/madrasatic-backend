@@ -98,11 +98,11 @@ class MDeclaration(models.Model):
 
     )
 
-    catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE, null=True)
-    site = models.ForeignKey(Site, related_name='declaration_site',on_delete= models.CASCADE)
-    bloc = models.ForeignKey(Bloc, related_name='declaration_bloc',on_delete= models.CASCADE)
-    endroit = models.ForeignKey(Endroit, related_name='declaration_endroit_type',on_delete= models.CASCADE)
-    lieu = models.ForeignKey(Identification, related_name='declaration_place',on_delete= models.CASCADE)
+    catégorie = models.ForeignKey(Category,related_name='declaration_categorie',on_delete=models.CASCADE, null=True,default=None)
+    site = models.ForeignKey(Site, related_name='declaration_site',on_delete= models.CASCADE,null=True,default=None)
+    bloc = models.ForeignKey(Bloc, related_name='declaration_bloc',on_delete= models.CASCADE,null=True,default=None)
+    endroit = models.ForeignKey(Endroit, related_name='declaration_endroit_type',on_delete= models.CASCADE,null=True,default=None)
+    lieu = models.ForeignKey(Identification, related_name='declaration_place',on_delete= models.CASCADE,null=True,default=None)
     priorité = models.CharField(max_length=30, choices=niveaux, default='Etat normal')
     objet = models.TextField(null=True)
     corps = models.TextField(null=True)
