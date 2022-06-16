@@ -112,8 +112,8 @@ class MDeclaration(models.Model):
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
     parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
-    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed' )
-    signalée_par = models.ManyToManyField(get_user_model(),related_name='users_who_signaled')
+    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed',blank= True)
+    signalée_par = models.ManyToManyField(get_user_model(),related_name='users_who_signaled', blank=True )
 
     objects = models.Manager()  # default manager
 

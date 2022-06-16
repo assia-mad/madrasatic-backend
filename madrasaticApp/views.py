@@ -53,6 +53,7 @@ class UpdateprofileView(viewsets.GenericViewSet , mixins.UpdateModelMixin,mixins
 class ServiceListView(viewsets.ModelViewSet):
     queryset = Myuser.objects.filter( role = 'Service')
     serializer_class = ServiceSerializer
+    pagination_class = None
 
 #categories
 class CategorieView(viewsets.ModelViewSet):
