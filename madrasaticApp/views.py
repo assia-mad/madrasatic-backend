@@ -317,7 +317,7 @@ class AnnonceurList(generics.ListAPIView):
 class AnnonceList(generics.ListAPIView):
     current = datetime.now()
     permission_classes = [permissions.IsAuthenticated]
-    queryset = AnnonceModel.objects.filter(etat='publiée', datedebut__lte = current ,dateFin__gt = current )
+    queryset = AnnonceModel.objects.filter(etat__in =['publiée','validé'], datedebut__lte = current ,dateFin__gt = current )
     serializer_class = AnnonceSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['auteur', 'objet','datedebut', 'pubDate','dateFin', 'etat']
