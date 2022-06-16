@@ -375,4 +375,39 @@ class AnnonceRejectionView(generics.CreateAPIView, generics.ListAPIView):
     filterset_fields = ['responsable', 'annonce', 'created_on']
     search_fields = ['responsable__id', 'annonce__id', 'created_on']
     ordering_fields = ['responsable', 'annonce', 'created_on']
-     
+
+class UserStatisticsView(APIView):
+    def get(self, request, format=None):
+        ''' Users Statistics '''
+        all_users_count = Myuser.objects.all().count() # all current users
+        active_users_count = Myuser.objects.filter(is_active=True).exclude(role='Admin').count() #  active users exclude Admins
+        all_signaler_count = Myuser.objects.filter(role = "('Utilisateur', 'User')").count() + Myuser.objects.filter(role = "Utilisateur").count()# signalers
+        current_services_count = Myuser.objects.filter(role="Service").count() # services
+
+        data = {
+            'all_users': all_users_count,
+            'active_users': active_users_count,
+            'signalers': all_signaler_count, 
+            'current_services':  current_services_count,
+            }
+
+        return Response(data)
+
+class DeclarationStatisticsView(APIView):
+    def get(self, request, format=None):
+        ''' Users Statistics '''
+        urgence = dict()
+        critique = dict()
+        normal = dict()
+        status = ["publiée","rejetée", "incompléte","traitée","en cours de traitement","non traitée"]
+        for statu in status:
+            urgence[statu] = MDeclaration.objects.filter(priorité =1 ).filter(etat = statu).count() # only parents
+            critique[statu] = MDeclaration.objects.filter(priorité=2).filter(etat=statu).count()
+            normal[statu] = MDeclaration.objects.filter(priorité=3).filter(etat=statu).count()
+            
+        data = {
+            'urgence':urgence ,
+            'critique': critique,
+            'normal': normal,
+        }
+        return Response(data)

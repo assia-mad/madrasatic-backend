@@ -108,6 +108,9 @@ urlpatterns = [
    path('annoncedelete/<int:pk>/', DeleteAnnonce.as_view()),
    #annonce rejection
    path('annonce_rejection/', AnnonceRejectionView.as_view()),
+   #statistique
+   path('declaration_stat/',DeclarationStatisticsView.as_view()),
+   path('user_stat/',UserStatisticsView.as_view()),
 
 
 ]
