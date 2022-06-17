@@ -337,6 +337,7 @@ class SavedAnnonceList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedAndOwner]
     queryset = AnnonceModel.objects.filter(etat='brouillon')
     serializer_class = AnnonceSerializer
+    pagination_class = None
 
     #afficher seulement les brouillon faits par l'annonceur en question
     def get_queryset(self):
@@ -366,14 +367,17 @@ class DeleteAnnonce(generics.RetrieveDestroyAPIView):
         return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
 
 class AnnonceRejectionView(generics.CreateAPIView, generics.ListAPIView):  
-    queryset = AnnonceRejection.objects.all()
     serializer_class =  AnnonceRejectionSerializer
+    pagination_class = None
     #permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['responsable', 'annonce', 'created_on']
     filterset_fields = ['responsable', 'annonce', 'created_on']
     search_fields = ['responsable__id', 'annonce__id', 'created_on']
     ordering_fields = ['responsable', 'annonce', 'created_on']
+    def get_queryset(self):
+        return AnnonceRejection.objects.filter(annonce__auteur = self.request.user)
+
 
 class UserStatisticsView(APIView):
     def get(self, request, format=None):
