@@ -168,7 +168,6 @@ class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
 
 # declaration complement demand View
 class DeclarationComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
-
     queryset = DeclarationComplementDemand.objects.all()
     serializer_class = DeclarationComplementDemandSerializer
     permission_classes = [ResponsableAuthenticationPermission]
@@ -189,8 +188,6 @@ class ServiceDeclarationsView(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return MDeclaration.objects.filter(etat__in = ['en cours de traitement','traitée','non traitée'],catégorie__service = self.request.user)
-
-
 
 # Pusher Beams AUTH
 class BeamsAuthView(APIView):
@@ -224,8 +221,7 @@ class NotificationView(viewsets.ModelViewSet):
     authentication_classes = []
     permission_classes = []
     pagination_class = NotificationCustomPagination
-
-
+    
 class PusherAuthView(APIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
@@ -324,6 +320,8 @@ class AnnonceList(generics.ListAPIView):
     filterset_fields = ['auteur', 'objet','datedebut', 'pubDate','dateFin', 'etat']
     search_fields = ['auteur__id', 'objet','datedebut', 'pubDate','dateFin', 'etat']
     ordering_fields = ['auteur', 'objet', 'datedebut','pubDate','dateFin', 'etat']
+
+
 
 
 #Création d'une annonce

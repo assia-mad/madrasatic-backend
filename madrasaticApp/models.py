@@ -83,8 +83,8 @@ class MDeclaration(models.Model):
 
         ('brouillon', 'Brouillon'),
         ('publiée', 'Publiée'),
-        ('non traitée','non traitée'),
-        ('en cours de traitement','en cours de traitement'),
+        ('non_traitée','non_traitée'),
+        ('en_cours_de_traitement','en_cours_de_traitement'),
         ('traitée','traitée'),
         ('rejetée','rejetée'),
         ('incompléte','incompléte'),
@@ -112,7 +112,7 @@ class MDeclaration(models.Model):
     etat = models.CharField(max_length=100, choices=options, default='brouillon')
     image = models.ImageField(upload_to='declaration_images/', null = True)
     parent_declaration = models.ForeignKey('self', default=None, null=True, related_name='declaration.parent_declaration+', on_delete=models.CASCADE)
-    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed',blank= True)
+    confirmée_par = models.ManyToManyField(get_user_model(),related_name='users_who_confirmed',blank= True )
     signalée_par = models.ManyToManyField(get_user_model(),related_name='users_who_signaled', blank=True )
 
     objects = models.Manager()  # default manager

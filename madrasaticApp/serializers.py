@@ -241,6 +241,12 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
         channel = u'Declaration'
         event = u'Rejet'
         channels_notify(channel, event, data)
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
         return validated_data 
         
 # Declaration complement demand serializer
@@ -256,7 +262,7 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         user = declaration.auteur
         responsable = validated_data['responsable']
         title = 'Completer votre déclaration'
-        body = ' Le responsable' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' '+ reason
         instance = super().create(validated_data)
         instance.declaration.etat = 'incompléte'
         instance.declaration.save()
@@ -271,7 +277,13 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         channel = u'Declaration'
         event = u'Demande complement'
         channels_notify(channel, event, data)
-        return validated_data
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
+        return instance
 
 #service Declarations
 class ServiceDeclarationsSerializer(serializers.ModelSerializer):
@@ -284,7 +296,7 @@ class ServiceDeclarationsSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['id','body', 'user', 'responsable', 'service', 'created_on']
+        fields = ['id','body','title', 'user', 'responsable', 'service', 'created_on']
         lookup_field = 'id'
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -304,7 +316,7 @@ class ReportRejectionSerializer(serializers.ModelSerializer):
         user = report.service
         responsable = validated_data['responsable']
         title = 'votre rapport a été rejeté'
-        body = ' Le responsable' + responsable.username +'a rejeté votre : '+ report.title + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'a rejeté votre : '+ report.title + ' '+ reason
         instance = super().create(validated_data)
         instance.report.status= 'rejetée'
         instance.report.save()
@@ -319,6 +331,12 @@ class ReportRejectionSerializer(serializers.ModelSerializer):
         channel = u'Report'
         event = u'Rejet'
         channels_notify(channel, event, data)
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
         return validated_data
 
 class ReportComplementDemandSerializer(serializers.ModelSerializer):
@@ -333,7 +351,7 @@ class ReportComplementDemandSerializer(serializers.ModelSerializer):
         print(user)
         responsable = validated_data['responsable']
         title = 'Compléter votre rapport'
-        body = ' Le responsable' + responsable.username +'vous demande de compléter votre rapport: '+ report.title + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'vous demande de compléter votre rapport: '+ report.title + ' '+ reason
         instance = super().create(validated_data)
         instance.report.status= 'incomplet'
         instance.report.save()
@@ -347,6 +365,12 @@ class ReportComplementDemandSerializer(serializers.ModelSerializer):
         channel = u'Report'
         event = u'Demander complement'
         channels_notify(channel, event, data)
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
         return validated_data
 
 #Annonce serializer
@@ -367,7 +391,7 @@ class AnnonceRejectionSerializer(serializers.ModelSerializer):
         print(user)
         responsable = validated_data['responsable']
         title = 'votre annonce a été rejeté'
-        body = ' Le responsable' + responsable.username +'a rejeté votre annonce: '+ annonce.objet + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'a rejeté votre annonce: '+ annonce.objet + ' '+ reason
         instance = super().create(validated_data)
         instance.annonce.etat='rejeté'
         instance.annonce.save()
@@ -381,4 +405,10 @@ class AnnonceRejectionSerializer(serializers.ModelSerializer):
         channel = u'Annonce'
         event = u'Rejet'
         channels_notify(channel, event, data)
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.user = user
+        notification.responsable = responsable
+        notification.save()
         return validated_data
