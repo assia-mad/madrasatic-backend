@@ -398,7 +398,7 @@ class DeclarationStatisticsView(APIView):
         urgence = dict()
         critique = dict()
         normal = dict()
-        status = ["publiée","rejetée", "incompléte","traitée","en cours de traitement","non traitée"]
+        status = ["publiée","rejetée", "incompléte","traitée","en_cours_de_traitement","non_traitée"]
         for statu in status:
             urgence[statu] = MDeclaration.objects.filter(priorité =1 ).filter(etat = statu).count() # only parents
             critique[statu] = MDeclaration.objects.filter(priorité=2).filter(etat=statu).count()
