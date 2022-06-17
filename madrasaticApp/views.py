@@ -157,7 +157,6 @@ class ResponsableDeclarationslist(viewsets.ModelViewSet):
 # reject declaration view
 class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
 
-    queryset = MDeclarationRejection.objects.all()
     serializer_class = DeclarationRejectionSerializer
     permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -165,10 +164,11 @@ class DeclarationRejectionView(generics.CreateAPIView, generics.ListAPIView):
     filterset_fields = ['responsable', 'declaration', 'created_on']
     search_fields = ['responsable__id', 'declaration__id', 'created_on']
     ordering_fields = ['responsable', 'declaration', 'created_on']
+    def get_queryset(self):
+        return MDeclarationRejection.objects.filter(declaration__auteur = self.request.user)
 
 # declaration complement demand View
 class DeclarationComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
-    queryset = DeclarationComplementDemand.objects.all()
     serializer_class = DeclarationComplementDemandSerializer
     permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -176,6 +176,8 @@ class DeclarationComplementDemandView(generics.CreateAPIView , generics.ListAPIV
     filterset_fields = ['responsable', 'declaration', 'created_on']
     search_fields = ['responsable__uid', 'declaration__did', 'created_on']
     ordering_fields = ['responsable', 'declaration', 'created_on']
+    def get_queryset(self):
+        return DeclarationComplementDemand.objects.filter(declaration__auteur = self.request.user)
 
 class ServiceDeclarationsView(viewsets.ModelViewSet):
     serializer_class = ServiceDeclarationsSerializer
@@ -276,7 +278,6 @@ class ReportsView(viewsets.ModelViewSet):
     ordering_fields = ['title','desc','service','declaration','status','created_on','validated_at','modified_at']
 
 class ReportRejectionView(generics.CreateAPIView, generics.ListAPIView):  
-    queryset = ReportRejection.objects.all()
     serializer_class =  ReportRejectionSerializer
     #permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -284,9 +285,10 @@ class ReportRejectionView(generics.CreateAPIView, generics.ListAPIView):
     filterset_fields = ['responsable', 'report', 'created_on']
     search_fields = ['responsable__id', 'report__id', 'created_on']
     ordering_fields = ['responsable', 'report', 'created_on']
+    def get_queryset(self):
+        return ReportRejection.objects.filter(report__service = self.request.user)
 
 class ReportComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
-    queryset = ReportComplementdemand.objects.all()
     serializer_class = ReportComplementDemandSerializer
     #permission_classes = [ResponsableAuthenticationPermission]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -294,6 +296,8 @@ class ReportComplementDemandView(generics.CreateAPIView , generics.ListAPIView):
     filterset_fields = ['responsable', 'report', 'created_on']
     search_fields = ['responsable__id', 'report__id', 'created_on']
     ordering_fields = ['responsable', 'report', 'created_on']
+    def get_queryset(self):
+        return ReportComplementdemand.objects.filter(report__service = self.request.user)
 
 
 #liste des annonces d'un annonceur
