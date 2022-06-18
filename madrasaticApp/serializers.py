@@ -304,6 +304,34 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = ['id','title','desc','image','service','declaration','status','created_on','validated_at','modified_at']
         lookup_field = 'id'
+    def create(self, validated_data):
+        declaration = validated_data['declaration']
+        title = validated_data['title']
+        user = declaration.auteur
+        responsable = Myuser.objects.filter(role='Responsable').first()
+        service = validated_data['service']
+        title = 'Rapport ajouté'
+        body = ' Le service  ' + service.username +' à rediger un rapport '+  title + ' pour la déclaration : '+ declaration.objet 
+        instance = super().create(validated_data)
+        instance.declaration.save()
+        # beams notification
+        print(user.id)
+        push_notify(user.id, service.id, title, body)
+        # channels notification
+        data = {
+            'title': title,
+            'body': body
+        }
+        channel = u'Rapport'
+        event = u'Creation'
+        channels_notify(channel, event, data)
+        notification = Notification()
+        notification.title = title
+        notification.body = body
+        notification.service = service
+        notification.responsable = responsable
+        notification.save()
+        return instance
 
 class ReportRejectionSerializer(serializers.ModelSerializer):
     class Meta :
