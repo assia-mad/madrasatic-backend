@@ -17,6 +17,7 @@ role_choices = [
 ]
 #rapport states
 states = [
+    
     ('brouillon', 'Brouillon'),
     ('publié', 'Publié'),
     ('validé','validé'),

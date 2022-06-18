@@ -189,7 +189,7 @@ class ServiceDeclarationsView(viewsets.ModelViewSet):
     ordering_fields = ['auteur', 'priorité', 'catégorie', 'objet', 'corps', 'lieu', 'etat']
     
     def get_queryset(self):
-        return MDeclaration.objects.filter(etat__in = ['en cours de traitement','traitée','non traitée'],catégorie__service = self.request.user)
+        return MDeclaration.objects.filter(etat__in = ['en_cours_de_traitement','traitée','non_traitée'],catégorie__service = self.request.user)
 
 # Pusher Beams AUTH
 class BeamsAuthView(APIView):
