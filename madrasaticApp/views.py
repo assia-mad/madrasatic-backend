@@ -358,7 +358,7 @@ class EditAnnonce(generics.RetrieveUpdateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return AnnonceModel.objects.filter(auteur=user, etat='brouillon')
+        return AnnonceModel.objects.filter(auteur=user)
 
 #Supprimer un brouillon
 class DeleteAnnonce(generics.RetrieveDestroyAPIView):
