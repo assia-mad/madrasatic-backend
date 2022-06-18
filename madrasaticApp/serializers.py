@@ -226,7 +226,7 @@ class DeclarationRejectionSerializer(serializers.ModelSerializer):
         user = declaration.auteur
         responsable = validated_data['responsable']
         title = 'Rejet de votre declaration'
-        body = 'La déclaration : '+ declaration.objet +' a été rejeté par ' + responsable.username +''+ 'et la raison c`est: '+ reason
+        body = 'La déclaration : '+ declaration.objet +' a été rejeté par ' + responsable.username + ' en raison de  '+ reason
         instance = super().create(validated_data)
         instance.declaration.etat = 'rejetée'
         instance.declaration.save()
@@ -262,7 +262,7 @@ class DeclarationComplementDemandSerializer(serializers.ModelSerializer):
         user = declaration.auteur
         responsable = validated_data['responsable']
         title = 'Completer votre déclaration'
-        body = ' Le responsable ' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'vous demande de completer votre déclaration : '+ declaration.objet + ' en raison de  '+ reason
         instance = super().create(validated_data)
         instance.declaration.etat = 'incompléte'
         instance.declaration.save()
@@ -316,7 +316,7 @@ class ReportRejectionSerializer(serializers.ModelSerializer):
         user = report.service
         responsable = validated_data['responsable']
         title = 'votre rapport a été rejeté'
-        body = ' Le responsable ' + responsable.username +'a rejeté votre : '+ report.title + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'a rejeté votre : '+ report.title +' en raison de  '+ reason
         instance = super().create(validated_data)
         instance.report.status= 'rejetée'
         instance.report.save()
@@ -351,7 +351,7 @@ class ReportComplementDemandSerializer(serializers.ModelSerializer):
         print(user)
         responsable = validated_data['responsable']
         title = 'Compléter votre rapport'
-        body = ' Le responsable ' + responsable.username +'vous demande de compléter votre rapport: '+ report.title + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'vous demande de compléter votre rapport: '+ report.title +' en raison de  '+ reason
         instance = super().create(validated_data)
         instance.report.status= 'incomplet'
         instance.report.save()
@@ -391,7 +391,7 @@ class AnnonceRejectionSerializer(serializers.ModelSerializer):
         print(user)
         responsable = validated_data['responsable']
         title = 'votre annonce a été rejeté'
-        body = ' Le responsable ' + responsable.username +'a rejeté votre annonce: '+ annonce.objet + ' '+ reason
+        body = ' Le responsable ' + responsable.username +'a rejeté votre annonce: '+ annonce.objet +' en raison de  '+ reason
         instance = super().create(validated_data)
         instance.annonce.etat='rejeté'
         instance.annonce.save()
