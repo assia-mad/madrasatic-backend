@@ -384,7 +384,7 @@ class UserStatisticsView(APIView):
         ''' Users Statistics '''
         all_users_count = Myuser.objects.all().count() # all current users
         active_users_count = Myuser.objects.filter(is_active=True).exclude(role='Admin').count() #  active users exclude Admins
-        all_signaler_count = Myuser.objects.filter(role = "('Utilisateur', 'User')").count() + Myuser.objects.filter(role = "Utilisateur").count()# signalers
+        all_signaler_count = Myuser.objects.filter(role = "('Utilisateur', 'User')").count() + Myuser.objects.filter(role = "Utilisateur").count() +  Myuser.objects.filter(role ="Président du club").count() # signalers
         current_services_count = Myuser.objects.filter(role="Service").count() # services
 
         data = {
