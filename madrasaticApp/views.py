@@ -356,10 +356,6 @@ class EditAnnonce(generics.RetrieveUpdateAPIView):
     serializer_class = AnnonceSerializer
     queryset = AnnonceModel.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return AnnonceModel.objects.filter(auteur=user)
-
 #Supprimer un brouillon
 class DeleteAnnonce(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
